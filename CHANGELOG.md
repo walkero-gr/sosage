@@ -2,6 +2,12 @@
 
 History of versions and modifications of the SOSAGE engine.
 
+## `v1.6.0 (mit)` - TBD
+
+### Release Management
+
+- License change (from GPL to MIT)
+
 ## `v1.5.5 (achievements5)` - 2023-10-09
 
 ### Bug fixes
