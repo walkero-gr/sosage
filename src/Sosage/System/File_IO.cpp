@@ -621,6 +621,10 @@ void File_IO::read_init_general (const Core::File_IO& input)
 {
   std::string data_version = input["data_version"].string();
   std::string data_variant = input["data_variant"].string();
+
+  if (input.has("no_menu") && input["no_menu"].boolean())
+    emit("Game", "no_menu");
+
   std::string min_sosage_version = input["min_sosage_version"].string();
   check (Version::parse(min_sosage_version) <= Version::get(),
          "Error: min version " + min_sosage_version + " incompatible with Sosage " + Version::str());

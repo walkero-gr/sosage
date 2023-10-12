@@ -131,7 +131,11 @@ void Control::init()
 void Control::update_exit()
 {
   if (signal("Game", "escape"))
+  {
     emit("Game", "clear_notifications");
+    if (signal("Game", "no_menu")) // Exit immediately
+      emit ("Game", "exit");
+  }
 
   if (status()->is (LOCKED))
   {

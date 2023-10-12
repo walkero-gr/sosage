@@ -197,6 +197,9 @@ Menu::Menu(Content& content)
 
 void Menu::run()
 {
+  if (signal("Game", "no_menu")) // Exit immediately
+    return;
+
   SOSAGE_TIMER_START(System_Menu__run);
   SOSAGE_UPDATE_DBG_LOCATION("Menu::run()");
 
