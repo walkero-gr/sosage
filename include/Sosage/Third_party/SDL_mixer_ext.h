@@ -37,7 +37,7 @@
 
 #ifdef SOSAGE_LINKED_WITH_SDL_MIXER_EXT
 
-#include <Sosage/Utils/Asset_manager.h>
+#include <Sosage/Core/Asset_manager.h>
 
 #include <SDL_mixer_ext.h>
 

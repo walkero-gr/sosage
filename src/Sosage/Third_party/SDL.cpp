@@ -31,8 +31,8 @@
 */
 
 #include <Sosage/Config/config.h>
+#include <Sosage/Core/Asset_manager.h>
 #include <Sosage/Third_party/SDL.h>
-#include <Sosage/Utils/Asset_manager.h>
 #include <Sosage/Utils/conversions.h>
 #include <Sosage/Utils/geometry.h>
 #include <Sosage/Utils/error.h>

@@ -32,7 +32,7 @@
 
 #include <Sosage/Config/config.h>
 #include <Sosage/Third_party/SDL_mixer_ext.h>
-#include <Sosage/Utils/Asset_manager.h>
+#include <Sosage/Core/Asset_manager.h>
 
 #include <Sosage/Utils/error.h>
 

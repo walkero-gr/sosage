@@ -31,7 +31,7 @@
 */
 
 #include <Sosage/Component/Ground_map.h>
-#include <Sosage/Utils/Asset_manager.h>
+#include <Sosage/Core/Asset_manager.h>
 #include <Sosage/Utils/binary_io.h>
 #include <Sosage/Utils/error.h>
 #include <Sosage/Utils/profiling.h>

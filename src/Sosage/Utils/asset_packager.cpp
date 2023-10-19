@@ -35,7 +35,7 @@
 #include <Sosage/Component/Ground_map.h>
 #include <Sosage/Third_party/LZ4.h>
 #include <Sosage/Third_party/SDL.h>
-#include <Sosage/Utils/Asset_manager.h>
+#include <Sosage/Core/Asset_manager.h>
 #include <Sosage/Utils/asset_packager.h>
 #include <Sosage/Utils/conversions.h>
 #include <Sosage/Utils/binary_io.h>

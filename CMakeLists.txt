@@ -22,6 +22,10 @@ endif()
 
 include(${SOSAGE_DATA_FOLDER}/config.cmake)
 
+if (SOSAGE_DATA_IS_PACKAGED)
+  add_definitions(-DSOSAGE_PACKAGED)
+endif()
+
 # Native Android compilation (on Termux for example)
 # To compile APK, use Gradlew instead
 if (CMAKE_SYSTEM_NAME STREQUAL Android)

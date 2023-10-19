@@ -33,7 +33,7 @@
 #ifndef SOSAGE_UTILS_ASSET_PACKAGER_H
 #define SOSAGE_UTILS_ASSET_PACKAGER_H
 
-#include <Sosage/Utils/Asset_manager.h>
+#include <Sosage/Core/Asset_manager.h>
 
 #include <memory>
 

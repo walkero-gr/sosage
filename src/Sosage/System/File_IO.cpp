@@ -47,8 +47,8 @@
 #include <Sosage/Component/Variable.h>
 #include <Sosage/Config/platform.h>
 #include <Sosage/Config/version.h>
+#include <Sosage/Core/Asset_manager.h>
 #include <Sosage/System/File_IO.h>
-#include <Sosage/Utils/Asset_manager.h>
 #include <Sosage/Utils/color.h>
 #include <Sosage/Utils/conversions.h>
 #include <Sosage/Utils/Gamepad_info.h>

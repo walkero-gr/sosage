@@ -33,7 +33,7 @@
 #ifndef SOSAGE_THIRD_YAML_H
 #define SOSAGE_THIRD_YAML_H
 
-#include <Sosage/Utils/Asset_manager.h>
+#include <Sosage/Core/Asset_manager.h>
 #include <Sosage/Utils/conversions.h>
 
 #include <map>

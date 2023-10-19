@@ -39,6 +39,7 @@
 #include <Sosage/Config/options.h>
 #include <Sosage/Config/platform.h>
 #include <Sosage/Config/version.h>
+#include <Sosage/Core/Asset_manager.h>
 #include <Sosage/Engine.h>
 #include <Sosage/System/Animation.h>
 #include <Sosage/System/Control.h>
@@ -54,7 +55,6 @@
 #include <Sosage/System/Sound.h>
 #include <Sosage/System/Time.h>
 #include <Sosage/Third_party/Steam.h>
-#include <Sosage/Utils/Asset_manager.h>
 #include <Sosage/Utils/error.h>
 #include <Sosage/Utils/profiling.h>
 
@@ -68,9 +68,6 @@ namespace Sosage
 {
 
 // Global variables
-std::string Asset_manager::folder_name = "";
-std::vector<Buffer> Asset_manager::buffers;
-Package_asset_map Asset_manager::package_asset_map;
 double Config::interface_scale = 1;
 #ifdef SOSAGE_DEBUG_BUFFER
 Debug_buffer debug_buffer;

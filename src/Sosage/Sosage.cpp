@@ -1,4 +1,4 @@
-#include <Sosage/Utils/Asset_manager.h>
+#include <Sosage/Core/Asset_manager.h>
 #include <Sosage/Utils/error.h>
 #include <Sosage/Engine.h>
 
