@@ -96,15 +96,14 @@ Ground_map::Ground_map (const std::string& entity, const std::string& component,
   int height = m_image->h;
   m_radius = int(distance(0, 0, width, height));
 
-  if (Asset_manager::packaged())
-  {
+#ifdef SOSAGE_PACKAGED
     std::string graph_file = file_name;
     graph_file.resize (graph_file.size() - 3);
     graph_file += "graph";
     read(graph_file);
-  }
-  else
+#else
     build_graph(callback);
+#endif
   
   m_latest_graph = m_graph;
   

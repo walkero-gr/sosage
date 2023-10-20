@@ -22,7 +22,7 @@ endif()
 
 include(${SOSAGE_DATA_FOLDER}/config.cmake)
 
-if (SOSAGE_DATA_IS_PACKAGED)
+if (EXISTS ${SOSAGE_DATA_FOLDER}/data/general.data)
   add_definitions(-DSOSAGE_PACKAGED)
 endif()
 
@@ -85,7 +85,7 @@ endif()
 sosage_option(SOSAGE_CFG_DISPLAY_DEBUG_INFO "Force displaying debug info even in Release mode" OFF)
 sosage_option(SOSAGE_CFG_PROFILE "Profile and display timing info (requires debug info ON)" OFF)
 sosage_option(SOSAGE_CFG_USE_SDL_TIME "Use SDL clock instead of STL clock" OFF)
-sosage_option(SOSAGE_CFG_USE_SDL_MIXER_EXT "Use more advanced fork of SDL_Mixer" OFF)
+sosage_option(SOSAGE_CFG_USE_SDL_MIXER_EXT "Use more advanced fork of SDL_Mixer" ON)
 sosage_option(SOSAGE_CFG_GUILESS "Do not instanciate window/renderer, for testing purposes" OFF)
 sosage_option(SOSAGE_COMPILE_SCAP "Compile Sosage Compressed Data Packager" OFF)
 sosage_option(SOSAGE_CONFIG_ANDROID "Configure Sosage for Android" OFF)

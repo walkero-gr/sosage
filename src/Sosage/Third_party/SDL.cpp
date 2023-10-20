@@ -279,22 +279,22 @@ SDL::Image SDL::load_image (const std::string& file_name, bool with_mask, bool w
 
   Image out;
 
-  if (Asset_manager::packaged())
-    out = m_images.make_mapped
-      (file_name,
-       [&]() -> Image_base*
-       {
-         int width, height, format_int;
-         std::tie (width, height, format_int) = Asset_manager::image_info (file_name);
-         Uint32 nb_x = Splitter::nb_sub (width);
-         Uint32 nb_y = Splitter::nb_sub (height);
-         Bitmap_2 mask;
-         std::vector<SDL_Texture*> textures;
-         std::vector<SDL_Texture*> highlights;
-         textures.reserve(nb_x * nb_y);
-         highlights.reserve(nb_x * nb_y);
+#ifdef SOSAGE_PACKAGED
+  out = m_images.make_mapped
+        (file_name,
+         [&]() -> Image_base*
+  {
+           int width, height, format_int;
+           std::tie (width, height, format_int) = Asset_manager::image_info (file_name);
+           Uint32 nb_x = Splitter::nb_sub (width);
+           Uint32 nb_y = Splitter::nb_sub (height);
+           Bitmap_2 mask;
+           std::vector<SDL_Texture*> textures;
+           std::vector<SDL_Texture*> highlights;
+           textures.reserve(nb_x * nb_y);
+           highlights.reserve(nb_x * nb_y);
 
-         for (Uint32 x = 0; x < nb_x; ++ x)
+           for (Uint32 x = 0; x < nb_x; ++ x)
            for (Uint32 y = 0; y < nb_y; ++ y)
            {
              SDL_Surface* surf = nullptr;
@@ -336,111 +336,112 @@ SDL::Image SDL::load_image (const std::string& file_name, bool with_mask, bool w
              SDL_FreeSurface(surf);
            }
 
-         if (with_mask)
-         {
-           SOSAGE_TIMER_START(SDL_Image__load_image_mask);
-           mask = Bitmap_2 (width, height, false);
-           Asset asset = Asset_manager::open (file_name + ".mask");
-           asset.read (mask.data(), mask.size());
-           asset.close();
-           SOSAGE_TIMER_STOP(SDL_Image__load_image_mask);
-         }
+           if (with_mask)
+           {
+             SOSAGE_TIMER_START(SDL_Image__load_image_mask);
+             mask = Bitmap_2 (width, height, false);
+             Asset asset = Asset_manager::open (file_name + ".mask");
+             asset.read (mask.data(), mask.size());
+             asset.close();
+             SOSAGE_TIMER_STOP(SDL_Image__load_image_mask);
+           }
 
-         auto out = make_images (textures, highlights, width, height);
-         if (with_mask)
+           auto out = make_images (textures, highlights, width, height);
+           if (with_mask)
            out->mask = mask;
-         return out;
-       });
-  else // Not packaged
-    out = m_images.make_mapped
-      (file_name,
-       [&]() -> Image_base*
-       {
-         std::vector<SDL_Texture*> textures;
-         std::vector<SDL_Texture*> highlights;
-         Bitmap_2 mask;
-         SOSAGE_TIMER_START(SDL_Image__load_image_file);
-         Asset asset = Asset_manager::open(file_name);
+           return out;
+         });
+#else // Not packaged
+  out = m_images.make_mapped
+        (file_name,
+         [&]() -> Image_base*
+  {
+           std::vector<SDL_Texture*> textures;
+           std::vector<SDL_Texture*> highlights;
+           Bitmap_2 mask;
+           SOSAGE_TIMER_START(SDL_Image__load_image_file);
+           Asset asset = Asset_manager::open(file_name);
 
-         std::vector<SDL_Surface*> surfaces;
-         SDL_Surface* surf = IMG_Load_RW (asset.base(), 1);
-         check (surf != nullptr, "Cannot load image " + file_name
-         + " (" + std::string(SDL_GetError()) + ")");
-         SOSAGE_TIMER_STOP(SDL_Image__load_image_file);
-         Uint32 height = surf->h;
-         Uint32 width = surf->w;
+           std::vector<SDL_Surface*> surfaces;
+           SDL_Surface* surf = IMG_Load_RW (asset.base(), 1);
+           check (surf != nullptr, "Cannot load image " + file_name
+           + " (" + std::string(SDL_GetError()) + ")");
+           SOSAGE_TIMER_STOP(SDL_Image__load_image_file);
+           Uint32 height = surf->h;
+           Uint32 width = surf->w;
 
-         int nb_x = 1;
-         int nb_y = 1;
-         if (int(height) > m_max_texture_height || int(width) > m_max_texture_width)
-         {
-           nb_x = Splitter::nb_sub (width);
-           nb_y = Splitter::nb_sub (height);
-           debug << "Splitting overly large surface in " << nb_x << "x" << nb_y << std::endl;
-           textures.reserve(nb_x * nb_y);
-           highlights.reserve(nb_x * nb_y);
-           surfaces = Splitter::split_image (surf);
-         }
-         else
+           int nb_x = 1;
+           int nb_y = 1;
+           if (int(height) > m_max_texture_height || int(width) > m_max_texture_width)
+           {
+             nb_x = Splitter::nb_sub (width);
+             nb_y = Splitter::nb_sub (height);
+             debug << "Splitting overly large surface in " << nb_x << "x" << nb_y << std::endl;
+             textures.reserve(nb_x * nb_y);
+             highlights.reserve(nb_x * nb_y);
+             surfaces = Splitter::split_image (surf);
+           }
+           else
            surfaces.push_back(surf);
 
 
 #ifndef SOSAGE_GUILESS
-         SOSAGE_TIMER_START(SDL_Image__load_image_texture);
-         for (std::size_t i = 0; i < surfaces.size(); ++ i)
-         {
-           SDL_Texture* texture
-             = SDL_CreateTextureFromSurface(m_renderer, surfaces[i]);
-           check (texture != nullptr, "Cannot create texture from " + file_name
-           + " (" + std::string(SDL_GetError()) + ")");
-           textures.push_back(texture);
-         }
-         SOSAGE_TIMER_STOP(SDL_Image__load_image_texture);
-
-         if (with_highlight)
-         {
+           SOSAGE_TIMER_START(SDL_Image__load_image_texture);
            for (std::size_t i = 0; i < surfaces.size(); ++ i)
            {
-             SOSAGE_TIMER_START(SDL_Image__load_image_create_highlight);
-             SDL_Surface* high = SDL_CreateRGBSurfaceWithFormat
-               (0, surfaces[i]->w, surfaces[i]->h, 32, SDL_PIXELFORMAT_ARGB8888);
-             SDL_FillRect(high, nullptr, SDL_MapRGBA
-               (high->format, Uint8(0), Uint8(0), Uint8(0), Uint8(0)));
-             SDL_BlitSurface (surfaces[i], nullptr, high, nullptr);
-
-             Surface_access access (high);
-             for (std::size_t j = 0; j < access.height(); ++ j)
-             for (std::size_t i = 0; i < access.width(); ++ i)
-             access.set(i,j, {255, 255, 255, (unsigned char)(0.5 * access.get(i,j)[3])});
-             access.release();
-             SOSAGE_TIMER_STOP(SDL_Image__load_image_create_highlight);
-
-             SOSAGE_TIMER_START(SDL_Image__load_image_hightlight_2);
-             SDL_Texture* highlight
-               = SDL_CreateTextureFromSurface(m_renderer, high);
-             SDL_FreeSurface (high);
-             SOSAGE_TIMER_STOP(SDL_Image__load_image_hightlight_2);
-             highlights.push_back(highlight);
+             SDL_Texture* texture
+             = SDL_CreateTextureFromSurface(m_renderer, surfaces[i]);
+             check (texture != nullptr, "Cannot create texture from " + file_name
+             + " (" + std::string(SDL_GetError()) + ")");
+             textures.push_back(texture);
            }
-         }
-         else
+           SOSAGE_TIMER_STOP(SDL_Image__load_image_texture);
+
+           if (with_highlight)
+           {
+             for (std::size_t i = 0; i < surfaces.size(); ++ i)
+             {
+               SOSAGE_TIMER_START(SDL_Image__load_image_create_highlight);
+               SDL_Surface* high = SDL_CreateRGBSurfaceWithFormat
+               (0, surfaces[i]->w, surfaces[i]->h, 32, SDL_PIXELFORMAT_ARGB8888);
+               SDL_FillRect(high, nullptr, SDL_MapRGBA
+               (high->format, Uint8(0), Uint8(0), Uint8(0), Uint8(0)));
+               SDL_BlitSurface (surfaces[i], nullptr, high, nullptr);
+
+               Surface_access access (high);
+               for (std::size_t j = 0; j < access.height(); ++ j)
+               for (std::size_t i = 0; i < access.width(); ++ i)
+               access.set(i,j, {255, 255, 255, (unsigned char)(0.5 * access.get(i,j)[3])});
+               access.release();
+               SOSAGE_TIMER_STOP(SDL_Image__load_image_create_highlight);
+
+               SOSAGE_TIMER_START(SDL_Image__load_image_hightlight_2);
+               SDL_Texture* highlight
+               = SDL_CreateTextureFromSurface(m_renderer, high);
+               SDL_FreeSurface (high);
+               SOSAGE_TIMER_STOP(SDL_Image__load_image_hightlight_2);
+               highlights.push_back(highlight);
+             }
+           }
+           else
            highlights.push_back(nullptr);
 #endif
 
-         if (with_mask)
-         {
-           SOSAGE_TIMER_START(SDL_Image__load_image_mask);
-           mask = create_mask(surf);
-           SOSAGE_TIMER_STOP(SDL_Image__load_image_mask);
-         }
-         for (std::size_t i = 0; i < surfaces.size(); ++ i)
+           if (with_mask)
+           {
+             SOSAGE_TIMER_START(SDL_Image__load_image_mask);
+             mask = create_mask(surf);
+             SOSAGE_TIMER_STOP(SDL_Image__load_image_mask);
+           }
+           for (std::size_t i = 0; i < surfaces.size(); ++ i)
            SDL_FreeSurface(surfaces[i]);
 
-         auto out = make_images (textures, highlights, width, height);
-         if (with_mask)
+           auto out = make_images (textures, highlights, width, height);
+           if (with_mask)
            out->mask = mask;
-         return out;
-       });
+           return out;
+         });
+#endif
 
   SOSAGE_TIMER_STOP(SDL_Image__load_image);
 
@@ -719,22 +720,18 @@ int SDL::height (SDL::Image image)
 SDL::Surface SDL::load_surface (const std::string& file_name)
 {
   Surface surf;
-  if (Asset_manager::packaged())
-  {
-    int width, height;
-    int format_int;
-    std::tie (width, height, format_int) = Asset_manager::image_info (file_name);
-
-    surf = Surface(SDL_CreateRGBSurfaceWithFormat (0, width, height, 32, format_int), SDL_FreeSurface);
-    SDL_LockSurface (surf.get());
-    Asset_manager::open (file_name, surf->pixels);
-    SDL_UnlockSurface (surf.get());
-  }
-  else
-  {
-    Asset asset = Asset_manager::open(file_name);
-    surf = Surface(IMG_Load_RW(asset.base(), 1), SDL_FreeSurface);
-  }
+#ifdef SOSAGE_PACKAGED
+  int width, height;
+  int format_int;
+  std::tie (width, height, format_int) = Asset_manager::image_info (file_name);
+  surf = Surface(SDL_CreateRGBSurfaceWithFormat (0, width, height, 32, format_int), SDL_FreeSurface);
+  SDL_LockSurface (surf.get());
+  Asset_manager::open (file_name, surf->pixels);
+  SDL_UnlockSurface (surf.get());
+#else
+  Asset asset = Asset_manager::open(file_name);
+  surf = Surface(IMG_Load_RW(asset.base(), 1), SDL_FreeSurface);
+#endif
   check (surf != Surface(), "Cannot load image " + file_name);
   return surf;
 }
