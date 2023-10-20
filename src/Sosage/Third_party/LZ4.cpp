@@ -30,6 +30,8 @@
   Author(s): Simon Giraudot <sosage@ptilouk.net>
 */
 
+#ifdef SOSAGE_PACKAGED
+
 #include <Sosage/Third_party/LZ4.h>
 #include <Sosage/Utils/conversions.h>
 #include <Sosage/Utils/error.h>
@@ -69,3 +71,5 @@ void lz4_decompress_buffer (void* data, std::size_t size, void* out, std::size_t
 }
 
 } // namespace Sosage
+
+#endif

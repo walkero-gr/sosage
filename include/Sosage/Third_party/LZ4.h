@@ -33,6 +33,8 @@
 #ifndef SOSAGE_THIRD_PARTY_LZ4_H
 #define SOSAGE_THIRD_PARTY_LZ4_H
 
+#ifdef SOSAGE_PACKAGED
+
 #include <Sosage/Utils/binary_io.h>
 
 namespace Sosage
@@ -42,5 +44,7 @@ Buffer lz4_compress_buffer (void* data, std::size_t size);
 void lz4_decompress_buffer (void* data, std::size_t size, void* out, std::size_t output_size);
 
 }
+
+#endif // SOSAGE_PACKAGED
 
 #endif // SOSAGE_THIRD_PARTY_LZ4_H

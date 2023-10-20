@@ -792,8 +792,10 @@ void SDL::init (int& window_width, int& window_height, bool fullscreen)
   int okay = SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER);
   check (okay != -1, "Cannot initialize SDL: (" + std::string(SDL_GetError()) + ")");
 
+#ifndef SOSAGE_PACKAGED
   okay = IMG_Init(IMG_INIT_PNG);
   check (okay != -1, "Cannot initialize SDL Image");
+#endif
 
   okay = TTF_Init();
   check (okay != -1, "Cannot initialize SDL TTF");
@@ -866,7 +868,11 @@ SDL::~SDL ()
   delete[] (char*)m_hbuffer;
   clear_managers();
   TTF_Quit ();
+
+#ifndef SOSAGE_PACKAGED
   IMG_Quit ();
+#endif
+
 #ifndef SOSAGE_GUILESS
   SDL_DestroyRenderer (m_renderer);
   SDL_DestroyWindow (m_window);

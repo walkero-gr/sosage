@@ -121,7 +121,6 @@ void Packaged_asset::binary_read (Buffer& b)
   IO::read (m_base, b.data(), b.size());
 }
 
-
 bool Packaged_asset_manager::init (const std::string& folder, bool scap_mode)
 {
   folder_name = folder;
