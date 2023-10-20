@@ -90,7 +90,6 @@ sosage_option(SOSAGE_CFG_PROFILE "Profile and display timing info (requires debu
 sosage_option(SOSAGE_CFG_USE_SDL_TIME "Use SDL clock instead of STL clock" OFF)
 sosage_option(SOSAGE_CFG_USE_SDL_MIXER_EXT "Use more advanced fork of SDL_Mixer" ON)
 sosage_option(SOSAGE_CFG_GUILESS "Do not instanciate window/renderer, for testing purposes" OFF)
-sosage_option(SOSAGE_COMPILE_SCAP "Compile Sosage Compressed Data Packager" OFF)
 sosage_option(SOSAGE_CONFIG_ANDROID "Configure Sosage for Android" OFF)
 
 set(STEAMSDK_ROOT "" CACHE PATH "Root of Steam SDK (optional)")
@@ -402,18 +401,3 @@ if (SOSAGE_CONFIG_ANDROID)
 endif()
 
 include(CPack)
-
-if(SOSAGE_COMPILE_SCAP)
-  set(SCAP_SRC "src/Sosage/Component/Base.cpp" "src/Sosage/Component/Ground_map.cpp"
-    "src/Sosage/Third_party/LZ4.cpp" "src/Sosage/Third_party/SDL.cpp"  "src/Sosage/Third_party/SDL_file.cpp"
-    "src/Sosage/Utils/asset_packager.cpp" "src/Sosage/Utils/Asset_manager.cpp" "src/Sosage/Utils/Bitmap_2.cpp"
-     "src/Sosage/Utils/binary_io.cpp" "src/Sosage/Utils/color.cpp"
-    "src/Sosage/Utils/conversions.cpp" "src/Sosage/Utils/error.cpp" "src/Sosage/Utils/geometry.cpp"
-    "src/Sosage/Utils/image_split.cpp" "src/Sosage/Utils/profiling.cpp")
-  add_executable("SCAP" "src/Sosage/SCAP.cpp" ${SCAP_SRC})
-  target_include_directories(SCAP PUBLIC ${SOSAGE_INCLUDE_DIRECTORIES})
-  target_link_libraries(SCAP ${SOSAGE_LINK_LIBRARIES} "tbb")
-  target_compile_definitions(SCAP PUBLIC
-    ${SOSAGE_COMPILE_DEFINITIONS}
-    "SOSAGE_SCAP")
-endif()

@@ -1,10 +1,4 @@
-#ifdef SOSAGE_SCAP // avoid main() conflicts with Sosage
-
 #include <Sosage/Utils/asset_packager.h>
-
-std::string Sosage::Asset_manager::folder_name = "";
-std::vector<Sosage::Buffer> Sosage::Asset_manager::buffers;
-Sosage::Package_asset_map Sosage::Asset_manager::package_asset_map;
 
 int main (int argc, char** argv)
 {
@@ -24,5 +18,3 @@ int main (int argc, char** argv)
 
   return EXIT_SUCCESS;
 }
-
-#endif
