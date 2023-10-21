@@ -39,7 +39,9 @@
 #include <Sosage/Utils/image_split.h>
 #include <Sosage/Utils/profiling.h>
 
+#ifndef SOSAGE_PACKAGED
 #include <SDL_image.h>
+#endif
 #include <SDL_hints.h>
 
 #include <queue>

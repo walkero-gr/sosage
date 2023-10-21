@@ -30,9 +30,14 @@
   Author(s): Simon Giraudot <sosage@ptilouk.net>
 */
 
+#include <Sosage/Config/platform.h>
 #include <Sosage/Utils/datetime.h>
 
 #include <ctime>
+
+#ifdef SOSAGE_WINDOWS
+#pragma warning(disable : 4996)
+#endif
 
 namespace Sosage
 {
