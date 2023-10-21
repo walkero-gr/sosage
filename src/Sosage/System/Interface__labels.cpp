@@ -1121,7 +1121,7 @@ C::Functional_position_handle Interface::wriggly_position (const std::string& id
 
   auto out = C::make_handle<C::Functional_position>
       (id, cmp,
-       [range, origin, diff, time, tbegin, orientation, object_label](const std::string&) -> Point
+       [range, origin, diff, time, tbegin, orientation, object_label, &period, &cos30, &sin30](const std::string&) -> Point
   {
     if (object_label)
     {

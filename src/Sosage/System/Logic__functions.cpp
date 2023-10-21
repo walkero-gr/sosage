@@ -136,7 +136,7 @@ bool Logic::function_camera (const std::vector<std::string>& args)
  */
 bool Logic::function_control (const std::vector<std::string>& args)
 {
-  check (args.size() == 1 or args.size() == 2, "function_load control takes 1 or 2 arguments");
+  check (args.size() == 1 || args.size() == 2, "function_load control takes 1 or 2 arguments");
   std::string leader = args[0];
   if (auto current = request<C::String>("Player", "name"))
   {

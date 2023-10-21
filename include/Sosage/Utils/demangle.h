@@ -33,7 +33,12 @@
 #ifndef SOSAGE_UTILS_DEMANGLE_H
 #define SOSAGE_UTILS_DEMANGLE_H
 
+#include <Sosage/Config/platform.h>
+
+#ifndef SOSAGE_WINDOWS // TODO: demangle on Visual Studio
 #include <cxxabi.h>
+#endif
+
 #include <string>
 
 namespace Sosage
@@ -41,11 +46,15 @@ namespace Sosage
 
 inline std::string demangle (const char* name)
 {
+#ifdef SOSAGE_WINDOWS
+	return name;
+#else
   int status = 0;
   char* cout = abi::__cxa_demangle(name, nullptr, nullptr, &status);
   std::string out(cout);
   delete cout;
   return out;
+#endif
 }
 
 } // namespace Sosage

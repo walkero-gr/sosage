@@ -34,6 +34,7 @@
 #define SOSAGE_UTILS_CONVERSIONS_H
 
 #include <algorithm>
+#include <functional>
 #include <string>
 #include <vector>
 

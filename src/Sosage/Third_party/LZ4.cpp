@@ -35,6 +35,7 @@
 #include <Sosage/Third_party/LZ4.h>
 #include <Sosage/Utils/conversions.h>
 #include <Sosage/Utils/error.h>
+#include <Sosage/Config/platform.h>
 
 #include <lz4.h>
 #include <lz4hc.h>
