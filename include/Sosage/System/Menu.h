@@ -36,19 +36,20 @@
 #include <Sosage/Component/Menu.h>
 #include <Sosage/Content.h>
 #include <Sosage/System/Base.h>
+#include <Sosage/Utils/helpers.h>
 
 namespace Sosage
 {
 
 namespace Config
 {
-constexpr auto exit_menu_items
+constexpr_auto exit_menu_items
 = {  "Phone", "Settings", "Controls", "New_game"
      #ifndef SOSAGE_EMSCRIPTEN
      , "Load", "Save", "Quit"
      #endif
   };
-constexpr auto menus
+constexpr_auto menus
 = {  "Exit", "Phone", "Settings", "Controls"
      #ifndef SOSAGE_EMSCRIPTEN
      , "Load", "Save"

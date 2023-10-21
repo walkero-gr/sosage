@@ -33,6 +33,14 @@
 #ifndef SOSAGE_UTILS_HELPERS_H
 #define SOSAGE_UTILS_HELPERS_H
 
+#include <Sosage/Config/platform.h>
+
+#ifdef SOSAGE_WINDOWS // Windows is shit at constexpr
+#define constexpr_auto static const auto
+#else
+#define constexpr_auto constexpr auto
+#endif
+
 #define is_looking_right(x) \
   (get<C::Animation>(x + "_head", "image")->frames().front().y == 0)
 

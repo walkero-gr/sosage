@@ -33,6 +33,8 @@
 #ifndef SOSAGE_CONFIG_CONFIG_H
 #define SOSAGE_CONFIG_CONFIG_H
 
+#include <Sosage/Utils/helpers.h>
+
 #include <memory>
 #include <limits>
 
@@ -55,9 +57,9 @@ constexpr double camera_speed = 1.0;
 
 constexpr int animation_fps = 12;
 
-constexpr auto possible_actions = { "look", "move", "take", "inventory", "use", "combine", "goto" };
+constexpr_auto possible_actions = { "look", "move", "take", "inventory", "use", "combine", "goto" };
 
-constexpr auto save_ids = { "auto", "1", "2", "3", "4", "5" };
+constexpr_auto save_ids = { "auto", "1", "2", "3", "4", "5" };
 
 constexpr double default_sound_fade_time = 0.2;
 

@@ -37,7 +37,9 @@
 
 #include <Sosage/Third_party/SDL_file.h>
 #include <Sosage/Utils/binary_io.h>
+#include <Sosage/Utils/helpers.h>
 
+#include <array>
 #include <unordered_map>
 
 namespace Sosage
@@ -45,9 +47,7 @@ namespace Sosage
 
 namespace IO = Third_party::SDL_file;
 
-constexpr auto packages = { "general", "locale", "images",
-                            "images_animations",
-                            "images_scenery", "sounds" };
+constexpr_auto packages = { "general", "locale", "images", "images_animations", "images_scenery", "sounds" };
 
 class Packaged_asset_manager;
 
