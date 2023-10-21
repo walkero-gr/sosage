@@ -137,7 +137,7 @@ if data["compress_data"]:
     run_cmd("rm -rf " + scap_buildir)
     run_cmd("mkdir -p " + scap_buildir)
     chdir(scap_buildir)
-    run_cmd("cmake -DCMAKE_BUILD_TYPE=" + data["build"] + " -DSOSAGE_COMPILE_SCAP:BOOL=True -DSOSAGE_DATA_FOLDER=" + raw_data_folder + " " + cwd)
+    run_cmd("cmake -DCMAKE_BUILD_TYPE=" + data["build"] + " " + cwd + '/tools/SCAP')
     run_cmd("make -j " + str(data["threads"]) + " SCAP")
     end = time.perf_counter()
     print("  -> done in " + str(int(end - begin)) + "s\n")
