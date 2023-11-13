@@ -71,6 +71,7 @@ public:
 
   std::pair<Gamepad_ptr, int> open_gamepad (int idx) const;
   void close_gamepad (Gamepad_ptr ptr) const;
+  void rumble_gamepad (Gamepad_ptr ptr, double intensity, double duration) const;
 
   Gamepad_info gamepad_info(Gamepad_ptr ptr) const;
 

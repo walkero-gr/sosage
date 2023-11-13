@@ -134,6 +134,14 @@ void SDL_events::close_gamepad (Gamepad_ptr ptr) const
   SDL_GameControllerClose (ptr);
 }
 
+void SDL_events::rumble_gamepad (Gamepad_ptr ptr, double intensity, double duration) const
+{
+  Uint16 intens = Uint16(intensity * 0xFFFF);
+  Uint32 durat = Uint32(1000. * duration);
+  if (SDL_GameControllerHasRumble(ptr))
+    SDL_GameControllerRumble (ptr, intens, intens, durat);
+}
+
 Gamepad_info SDL_events::gamepad_info (Gamepad_ptr ptr) const
 {
   if (ptr == nullptr)

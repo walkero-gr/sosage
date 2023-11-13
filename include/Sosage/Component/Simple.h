@@ -168,10 +168,10 @@ public:
     : Base(entity, component, std::make_pair(t1, t2))
   { }
 
-  T1& first() { return this->m_value.first(); }
-  const T1& first() const { return this->m_value.first(); }
-  T2& second() { return this->m_value.second(); }
-  const T2& second() const { return this->m_value.second(); }
+  T1& first() { return this->m_value.first; }
+  const T1& first() const { return this->m_value.first; }
+  T2& second() { return this->m_value.second; }
+  const T2& second() const { return this->m_value.second; }
 
   STR_NAME("Pair<" + type_name((T1*)(nullptr)) + "," + type_name((T2*)(nullptr)) + ">");
 };

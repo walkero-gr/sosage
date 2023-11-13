@@ -85,6 +85,12 @@ void Input::run()
     }
   }
 
+  if (auto rumble = request<C::Pair<double, double>>("Gamepad", "rumble"))
+  {
+    rumble_gamepad (rumble->first(), rumble->second());
+    remove(rumble);
+  }
+
   auto mode = get<C::Simple<Input_mode>>(INTERFACE__INPUT_MODE);
 
   bool arrow_released = false;
@@ -428,6 +434,7 @@ void Input::update_active_gamepad (const Event& ev)
 
       // Map SDL id to ingame ID
       set<C::String>("Gamepad_" + to_string(joystick_id), "ingame_id", id);
+      set<C::Int>(id, "joystick_id", joystick_id);
 
       // Set current gamepad
       debug << "Setting " << id << ":gamepad" << std::endl;
@@ -571,6 +578,15 @@ void Input::finalize_gamepad (bool arrow_released)
     emit("Stick", "moved");
   }
 }
+
+void Input::rumble_gamepad (double intensity, double duration)
+{
+  const std::string& gamepad = value<C::String>("Gamepad", "id");
+  int joystick_id = value<C::Int>(gamepad, "joystick_id");
+  auto ptr = value<C::Simple<Gamepad_ptr>>("Gamepad_" + to_string(joystick_id), "pointer");
+  m_core.rumble_gamepad (ptr, intensity, duration);
+}
+
 
 typename std::vector<bool>::reference Input::key_on(const Event_value& value)
 {

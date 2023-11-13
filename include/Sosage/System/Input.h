@@ -86,6 +86,7 @@ private:
   void update_touchscreen(const Event& ev);
   bool update_gamepad(const Event& ev);
   void finalize_gamepad (bool arrow_released);
+  void rumble_gamepad (double intensity, double duration);
 
   typename std::vector<bool>::reference key_on(const Event_value& value);
 #if defined(SOSAGE_DEV) || defined(SOSAGE_DEMO)
