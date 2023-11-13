@@ -56,6 +56,10 @@
 #include <Sosage/Utils/locale.h>
 #include <Sosage/Utils/profiling.h>
 
+#ifdef SOSAGE_PORT
+#include <Sosage/Third_party/Port.h>
+#endif
+
 #include <locale>
 
 #define INIT_DISPATCHER(id, func) \
@@ -304,6 +308,12 @@ void File_IO::write_config()
   output.write ("autosave", value<C::Boolean>("Game", "autosave"));
 
   output.write ("window", value<C::Int>("Window", "width"), value<C::Int>("Window", "height"));
+
+  output.close();
+
+#ifdef SOSAGE_PORT
+  Port::notify_data_change();
+#endif
 }
 
 bool File_IO::read_savefile (const std::string& save_id)
@@ -592,6 +602,11 @@ void File_IO::write_savefile()
        "info", value<C::String>("Game", "current_room_name"),
        time, date);
   emit("Saves", "have_changed");
+
+  output.close();
+#ifdef SOSAGE_PORT
+  Port::notify_data_change();
+#endif
 }
 
 

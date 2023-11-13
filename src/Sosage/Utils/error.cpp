@@ -36,7 +36,7 @@
 #include <android/log.h>
 #endif
 
-#if defined(SOSAGE_EMSCRIPTEN) || defined(SOSAGE_WINDOWS)
+#if defined(SOSAGE_EMSCRIPTEN) || defined(SOSAGE_WINDOWS) || defined(SOSAGE_PORT)
 #include <SDL.h>
 #endif
 
@@ -60,7 +60,7 @@ int Debug_buffer::sync()
 
 void check_impl (const char* file, int line, const std::string& str)
 {
-#if defined(SOSAGE_DEBUG) && !defined(SOSAGE_ANDROID)
+#if defined(SOSAGE_DEBUG) && !defined(SOSAGE_ANDROID) && !defined(SOSAGE_PORT)
   throw std::runtime_error(std::string(dbg_location) + ": " + str + " [" + file + ":" + std::to_string(line) + "]" );
 #else
   debug << "Error in " << dbg_location << ": "<< str << " [" << file << ":" << line << "]" << std::endl;

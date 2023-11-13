@@ -191,9 +191,15 @@ Yaml::Yaml (const std::string& filename, bool pref_file, bool write)
 
 Yaml::~Yaml()
 {
+  close();
+}
+
+void Yaml::close()
+{
   if (m_file)
     m_file.close();
 }
+
 
 bool Yaml::parse()
 {

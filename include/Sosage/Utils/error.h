@@ -51,7 +51,7 @@ extern char* dbg_location;
 
 #if !defined(SOSAGE_DEBUG)
 #define debug if(false) std::cerr
-#elif defined(SOSAGE_ANDROID) || defined(SOSAGE_WINDOWS) || defined(SOSAGE_EMSCRIPTEN)
+#elif defined(SOSAGE_ANDROID) || defined(SOSAGE_WINDOWS) || defined(SOSAGE_EMSCRIPTEN) || defined(SOSAGE_PORT)
 #define SOSAGE_DEBUG_BUFFER
 
 class Debug_buffer : public std::stringbuf

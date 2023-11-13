@@ -39,13 +39,23 @@ namespace Sosage
 namespace Config
 {
 
-#if defined(__ANDROID__) && !defined(SOSAGE_NATIVE_ANDROID)
+#if __has_include("Sosage/Third_party/Port.h")
+#define SOSAGE_PORT
+constexpr bool android = false;
+constexpr bool mac = false;
+constexpr bool windows = false;
+constexpr bool gnunux = false;
+constexpr bool emscripten = false;
+constexpr bool port = true;
+
+#elif defined(__ANDROID__) && !defined(SOSAGE_NATIVE_ANDROID)
 #define SOSAGE_ANDROID
 constexpr bool android = true;
 constexpr bool mac = false;
 constexpr bool windows = false;
 constexpr bool gnunux = false;
 constexpr bool emscripten = false;
+constexpr bool port = false;
 
 #elif defined(__APPLE__)
 #define SOSAGE_MAC
@@ -54,6 +64,7 @@ constexpr bool mac = true;
 constexpr bool windows = false;
 constexpr bool gnunux = false;
 constexpr bool emscripten = false;
+constexpr bool port = false;
 
 #elif defined(_WIN32)
 #define SOSAGE_WINDOWS
@@ -62,6 +73,7 @@ constexpr bool mac = false;
 constexpr bool windows = true;
 constexpr bool gnunux = false;
 constexpr bool emscripten = false;
+constexpr bool port = false;
 
 #elif defined(__linux__)
 #define SOSAGE_GNUNUX
@@ -70,6 +82,7 @@ constexpr bool mac = false;
 constexpr bool windows = false;
 constexpr bool gnunux = true;
 constexpr bool emscripten = false;
+constexpr bool port = false;
 
 #elif defined(__EMSCRIPTEN__)
 #define SOSAGE_EMSCRIPTEN
@@ -78,6 +91,7 @@ constexpr bool mac = false;
 constexpr bool windows = false;
 constexpr bool gnunux = false;
 constexpr bool emscripten = true;
+constexpr bool port = false;
 
 #endif
 
