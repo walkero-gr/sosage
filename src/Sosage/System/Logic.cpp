@@ -262,7 +262,7 @@ void Logic::cancel_action()
   auto action = request<C::Action>("Character", "action");
   if (action && action != logic_action)
   {
-    debug << "Cancel action " << action->str() << std::endl;
+    debug << "Cancel action " << action->entity() << std::endl;
 
     for (const auto& th : action->scheduled())
     {
@@ -372,7 +372,7 @@ void Logic::update_scheduled(Component::Action_handle a, bool skip_dialog)
       }
       else if (th.second->entity() != "wait")
       {
-        debug << a->str() << " remove " << th.second->str() << std::endl;
+        debug << a->entity() << " remove " << th.second->entity() << std::endl;
 
         // avoid removing new dialog with an outdated timed dialog
         if (startswith(th.second->entity(), "Comment_"))

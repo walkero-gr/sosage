@@ -122,7 +122,7 @@ void Action::schedule (double time, Handle h)
 
 void Action::reset_scheduled()
 {
-  debug << this->str() << " reset scheduled" << std::endl;
+ // debug << this->str() << " reset scheduled" << std::endl;
   m_timed.clear();
 }
 
