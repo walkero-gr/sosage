@@ -93,6 +93,8 @@ constexpr bool gnunux = false;
 constexpr bool emscripten = true;
 constexpr bool port = false;
 
+#else
+#error Undefined platform
 #endif
 
 }

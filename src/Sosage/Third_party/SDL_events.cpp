@@ -35,6 +35,10 @@
 #include <Sosage/Third_party/SDL_events.h>
 #include <Sosage/Utils/conversions.h>
 
+#ifdef SOSAGE_PORT
+#include <Sosage/Third_party/Port.h>
+#endif
+
 #include <iostream>
 
 namespace Sosage::Third_party
@@ -236,6 +240,10 @@ Event SDL_events::gamepad_event (const Event_type& type, const SDL_Event& ev) co
   }
   else
   {
+#ifdef SOSAGE_PORT
+    if (auto event = Port::gamepad_event(type, ev))
+      return event;
+#endif
     if (ev.cbutton.button == SDL_CONTROLLER_BUTTON_DPAD_UP)
       return Event (type, UP_ARROW);
     if (ev.cbutton.button == SDL_CONTROLLER_BUTTON_DPAD_RIGHT)

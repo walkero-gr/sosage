@@ -74,6 +74,7 @@ Packaged_asset::operator bool() const
 void Packaged_asset::close()
 {
   IO::close(m_base);
+  m_base.buffer = nullptr;
   if (m_buffer != nullptr)
   {
     delete m_buffer;

@@ -48,6 +48,8 @@ Asset open (const std::string& filename, bool write)
   out.buffer = SDL_RWFromFile(filename.c_str(), write ? "w" : "r");
   if (out.buffer != nullptr)
     out.size = std::size_t(SDL_RWsize (out.buffer));
+  else if (write)
+      check(false, "Can't open " + filename + ", " + std::string(SDL_GetError()));
   return out;
 }
 
@@ -82,7 +84,8 @@ void seek (Asset asset, std::size_t pos)
 
 void close (Asset asset)
 {
-  SDL_RWclose (asset.buffer);
+  int ret = SDL_RWclose (asset.buffer);
+  check(ret == 0, "Can't close file, " + std::string(SDL_GetError()));
 }
 
 std::string base_path()

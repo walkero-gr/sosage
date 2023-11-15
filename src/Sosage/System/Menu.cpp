@@ -369,16 +369,16 @@ void Menu::init()
 
 
   auto settings_menu = set<C::Menu>("Settings", "menu");
-  if constexpr (Config::emscripten || Config::android)
+  if constexpr (Config::emscripten || Config::android || Config::port)
       settings_menu->split(VERTICALLY, 7);
   else
-  settings_menu->split(VERTICALLY, 8);
+      settings_menu->split(VERTICALLY, 8);
 
   make_text_menu_title((*settings_menu)[0], "Settings");
   idx = 1;
   y = Config::settings_menu_start;
   for (const std::string& id : { "Language",
-#if !defined (SOSAGE_ANDROID) && !defined(SOSAGE_EMSCRIPTEN)
+#if !defined (SOSAGE_ANDROID) && !defined(SOSAGE_EMSCRIPTEN) && !defined(SOSAGE_PORT)
         "Fullscreen",
 #endif
        "Interface_scale", "Text_speed", "Music_volume", "Sound_volume" })

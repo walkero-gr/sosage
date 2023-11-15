@@ -46,7 +46,10 @@ namespace Config
 constexpr_auto exit_menu_items
 = {  "Phone", "Settings", "Controls", "New_game"
      #ifndef SOSAGE_EMSCRIPTEN
-     , "Load", "Save", "Quit"
+     , "Load", "Save"
+     #endif
+     #if !defined(SOSAGE_EMSCRIPTEN) && !defined(SOSAGE_PORT)
+     , "Quit"
      #endif
   };
 constexpr_auto menus

@@ -32,6 +32,11 @@
 
 #include <Sosage/Utils/conversions.h>
 #include <Sosage/Utils/Gamepad_info.h>
+#include <Sosage/Utils/error.h>
+
+#ifdef SOSAGE_PORT
+#include <Sosage/Third_party/Port.h>
+#endif
 
 #include <unordered_map>
 
@@ -43,6 +48,11 @@ Gamepad_info::Gamepad_info (unsigned short vendor, unsigned short product,
   : name (name)
 {
   id = to_string (vendor) + ":" + to_string(product);
+#ifdef SOSAGE_PORT
+  if (Port::init_gamepad(name, labels, ok_down))
+  { }
+  else
+#endif
   if (contains (name, "Xbox") ||
       contains (name, "Steam"))
   {

@@ -50,6 +50,7 @@ Input::Input (Content& content)
   : Base (content)
   , m_core()
   , m_keys_on(NUMBER_OF_EVENT_VALUES, false)
+  , m_x(0), m_y(0)
 #ifdef SOSAGE_DEV
   , m_fake_touchscreen(false)
   , m_demo_mode(false)
@@ -450,13 +451,14 @@ void Input::update_active_gamepad (const Event& ev)
                                            "pointer");
 
     // If deleted gamepad was being used, remove ID
+    std::string ingame_id = value<C::String>("Gamepad_" + to_string(ev.x()), "ingame_id");
     if (auto current = request<C::String>("Gamepad", "id"))
-      if (current->value()
-          == value<C::String>("Gamepad_" + to_string(ev.x()), "ingame_id"))
+      if (current->value() == ingame_id)
         remove (current);
 
     m_core.close_gamepad (ptr->value());
     remove (ptr);
+    remove(ingame_id, "is_open");
   }
   else if (ev.type() == GAMEPAD_CHANGED)
   {
