@@ -69,6 +69,7 @@ if not data["use_compressed_data"]:
 data_dir = data["buildfolder"] + "/data"
 scap_buildir = data["buildfolder"] + "/scap"
 linux_buildir = data["buildfolder"] + "/linux"
+linux32_buildir = data["buildfolder"] + "/linux32"
 steam_linux_buildir = data["buildfolder"] + "/steam_linux"
 android_buildir = data["buildfolder"] + "/android"
 mac_buildir = data["buildfolder"] + "/mac"
@@ -184,7 +185,7 @@ if data["data"]:
 
 if data["linux"]:
     try:
-        print("### BUILDING LINUX")
+        print("### BUILDING LINUX 64bits")
         begin = time.perf_counter()
         run_cmd("rm -rf " + linux_buildir)
         run_cmd("mkdir -p " + linux_buildir)
@@ -204,10 +205,35 @@ if data["linux"]:
             run_cmd('schroot --chroot debian_bullseye_64 -- sh -c "make -j ' + str(data["threads"]) + '"')
             run_cmd('schroot --chroot debian_bullseye_64 -- sh -c "make install"')
             run_cmd("mv install " + appname)
-            run_cmd("tar -czvf " + output_dir + "/" + appname + "-gnunux.tar.gz " + appname)
+            run_cmd("mv " + appname + "/bin " + appname + "/bin64")
+        end = time.perf_counter()
+        print("  -> done in " + str(int(end - begin)) + "s\n")
+
+        print("### BUILDING LINUX 32bits")
+        run_cmd("rm -rf " + linux32_buildir)
+        run_cmd("mkdir -p " + linux32_buildir)
+        chdir(linux32_buildir)
+        run_cmd("mkdir -p install")
+        cfg_cmd = cmake_cmd + ' -DYAML_INCLUDE_DIR=' + data["libyaml_source_path"] + '/include/'
+        cfg_cmd += ' -DSDL2_MIXER_EXT_INCLUDE_DIR:PATH=' + data["sdl2_mixer_ext_source_path"] + '/include/SDL_mixer_ext'
+        cfg_cmd += ' -DSDL2_MIXER_EXT_LIBRARY:FILEPATH=' + data["sdl2_mixer_ext_source_path"] + '/build_bullseye_32/lib/libSDL2_mixer_ext.a'
+        cfg_cmd += ' -DLZ4_INCLUDE_DIR=' + data["lz4_source_path"] + '/lib/ ' + cwd
+        cfg_cmd += ' -DCMAKE_INSTALL_PREFIX=./install ' + cwd
+        run_cmd('schroot --chroot debian_bullseye -- sh -c "' + cfg_cmd + '"')
+        if not configure_only:
+            run_cmd('schroot --chroot debian_bullseye -- sh -c "make -j ' + str(data["threads"]) + '"')
+            run_cmd('schroot --chroot debian_bullseye -- sh -c "make install"')
+            run_cmd("mkdir " + linux_buildir + "/" + appname + "/bin32")
+            run_cmd("mv install/bin/" + gamename + " ../" + linux_buildir + appname + "/bin32/")
         chdir(cwd)
         end = time.perf_counter()
         print("  -> done in " + str(int(end - begin)) + "s\n")
+            
+        if not configure_only:
+            chdir(linux_buildir)
+            run_cmd("tar -czvf " + output_dir + "/" + appname + "-gnunux.tar.gz " + appname)
+            
+        chdir(cwd)
     except:
         chdir(cwd)
         print("  -> failed")
