@@ -87,6 +87,10 @@ Event SDL_events::next_event ()
     return Event (WINDOW, FOREGROUND);
   if (ev.type == SDL_WINDOWEVENT)
   {
+#ifdef SOSAGE_PORT
+    if (auto event = Port::window_event(ev))
+      return event;
+#endif
     if (ev.window.event == SDL_WINDOWEVENT_RESIZED)
       return Event (WINDOW, RESIZED, ev.window.data1, ev.window.data2);
     if (ev.window.event == SDL_WINDOWEVENT_HIDDEN)
@@ -101,6 +105,7 @@ Event SDL_events::next_event ()
     {
       // Apparently cursor might show up when window gains focus again, so just in case...
       SDL_ShowCursor(SDL_DISABLE);
+      return Event(UNUSED);
     }
   }
   if (ev.type == SDL_CONTROLLERDEVICEADDED)

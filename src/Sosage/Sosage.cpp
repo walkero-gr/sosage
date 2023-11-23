@@ -2,6 +2,10 @@
 #include <Sosage/Utils/error.h>
 #include <Sosage/Engine.h>
 
+#ifdef SOSAGE_PORT
+#include <Sosage/Third_party/Port.h>
+#endif
+
 int main (int argc, char** argv)
 {
   Sosage::Engine sosage(argc, argv);
@@ -14,3 +18,7 @@ int main (int argc, char** argv)
 #endif
   return (sosage.run(SOSAGE_DATA_FOLDER) ? EXIT_SUCCESS : EXIT_FAILURE);
 }
+
+#ifdef SOSAGE_PORT
+SOSAGE_PORT_MAIN
+#endif

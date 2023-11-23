@@ -58,6 +58,10 @@
 #include <Sosage/Utils/error.h>
 #include <Sosage/Utils/profiling.h>
 
+#ifdef SOSAGE_PORT
+#include <Sosage/Third_party/Port.h>
+#endif
+
 #include <ctime>
 
 #ifdef SOSAGE_EMSCRIPTEN
@@ -184,6 +188,10 @@ bool Engine::run (const std::string& folder_name)
   control->init();
   interface->init();
   menu->init();
+
+#ifdef SOSAGE_PORT
+  Port::init();
+#endif
 
   debug << "Init done, entering main loop" << std::endl;
 
