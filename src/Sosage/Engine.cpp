@@ -40,6 +40,7 @@
 #include <Sosage/Config/platform.h>
 #include <Sosage/Config/version.h>
 #include <Sosage/Core/Asset_manager.h>
+#include <Sosage/Core/Port.h>
 #include <Sosage/Engine.h>
 #include <Sosage/System/Animation.h>
 #include <Sosage/System/Control.h>
@@ -57,10 +58,6 @@
 #include <Sosage/Third_party/Steam.h>
 #include <Sosage/Utils/error.h>
 #include <Sosage/Utils/profiling.h>
-
-#ifdef SOSAGE_PORT
-#include <Sosage/Third_party/Port.h>
-#endif
 
 #include <ctime>
 
@@ -189,9 +186,7 @@ bool Engine::run (const std::string& folder_name)
   interface->init();
   menu->init();
 
-#ifdef SOSAGE_PORT
-  Port::init();
-#endif
+  Core::Port::init();
 
   debug << "Init done, entering main loop" << std::endl;
 

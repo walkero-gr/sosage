@@ -48,6 +48,7 @@
 #include <Sosage/Config/platform.h>
 #include <Sosage/Config/version.h>
 #include <Sosage/Core/Asset_manager.h>
+#include <Sosage/Core/Port.h>
 #include <Sosage/System/File_IO.h>
 #include <Sosage/Utils/color.h>
 #include <Sosage/Utils/conversions.h>
@@ -55,10 +56,6 @@
 #include <Sosage/Utils/helpers.h>
 #include <Sosage/Utils/locale.h>
 #include <Sosage/Utils/profiling.h>
-
-#ifdef SOSAGE_PORT
-#include <Sosage/Third_party/Port.h>
-#endif
 
 #include <locale>
 
@@ -311,9 +308,7 @@ void File_IO::write_config()
 
   output.close();
 
-#ifdef SOSAGE_PORT
-  Port::notify_data_change();
-#endif
+  Core::Port::notify_data_change();
 }
 
 bool File_IO::read_savefile (const std::string& save_id)
@@ -604,9 +599,7 @@ void File_IO::write_savefile()
   emit("Saves", "have_changed");
 
   output.close();
-#ifdef SOSAGE_PORT
-  Port::notify_data_change();
-#endif
+  Core::Port::notify_data_change();
 }
 
 

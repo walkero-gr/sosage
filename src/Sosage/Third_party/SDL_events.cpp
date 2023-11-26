@@ -32,12 +32,9 @@
 
 #include <Sosage/Config/config.h>
 #include <Sosage/Config/platform.h>
+#include <Sosage/Core/Port.h>
 #include <Sosage/Third_party/SDL_events.h>
 #include <Sosage/Utils/conversions.h>
-
-#ifdef SOSAGE_PORT
-#include <Sosage/Third_party/Port.h>
-#endif
 
 #include <iostream>
 
@@ -87,10 +84,8 @@ Event SDL_events::next_event ()
     return Event (WINDOW, FOREGROUND);
   if (ev.type == SDL_WINDOWEVENT)
   {
-#ifdef SOSAGE_PORT
-    if (auto event = Port::window_event(ev))
+    if (auto event = Core::Port::window_event(ev))
       return event;
-#endif
     if (ev.window.event == SDL_WINDOWEVENT_RESIZED)
       return Event (WINDOW, RESIZED, ev.window.data1, ev.window.data2);
     if (ev.window.event == SDL_WINDOWEVENT_HIDDEN)
@@ -245,10 +240,8 @@ Event SDL_events::gamepad_event (const Event_type& type, const SDL_Event& ev) co
   }
   else
   {
-#ifdef SOSAGE_PORT
-    if (auto event = Port::gamepad_event(type, ev))
+    if (auto event = Core::Port::gamepad_event(type, ev))
       return event;
-#endif
     if (ev.cbutton.button == SDL_CONTROLLER_BUTTON_DPAD_UP)
       return Event (type, UP_ARROW);
     if (ev.cbutton.button == SDL_CONTROLLER_BUTTON_DPAD_RIGHT)
