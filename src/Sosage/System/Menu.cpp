@@ -582,6 +582,9 @@ void Menu::hide_menu (const std::string& id)
 
   remove ("Interface", "active_menu_item", true);
   remove ("Interface", "gamepad_active_menu_item", true);
+
+  if (id == "Settings")
+    emit("Game", "config_changed");
 }
 
 void Menu::delete_menu (const std::string& id)

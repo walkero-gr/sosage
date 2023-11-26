@@ -106,8 +106,12 @@ void File_IO::run()
     emit ("Game", "clear_notifications");
   }
 
-  if (receive("Game", "save"))
+  bool save = receive("Game", "save");
+
+  if (save)
     write_savefile();
+  if (receive("Game", "config_changed") || (save && Config::port))
+    write_config();
 
   SOSAGE_TIMER_STOP(System_File_IO__run);
 }
