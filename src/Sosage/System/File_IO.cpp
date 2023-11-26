@@ -208,7 +208,11 @@ void File_IO::read_config()
   // Default config values
   std::string locale = "";
   bool fullscreen = !Config::emscripten;
-  int input_mode = (Config::android ? TOUCHSCREEN : MOUSE);
+  int input_mode = MOUSE;
+  if constexpr (Config::android)
+    input_mode = TOUCHSCREEN;
+  else if constexpr (Config::port)
+    input_mode = GAMEPAD;
 
   int dialog_speed = Config::MEDIUM_SPEED;
   int interface_scale = Config::SMALL;

@@ -195,6 +195,7 @@ void Input::update_mode()
 
   auto mode = get<C::Simple<Input_mode>>(INTERFACE__INPUT_MODE);
 
+#ifndef SOSAGE_PORT
   // Only allow mode change when idle or cutscene
   if (status()->is(IDLE, CUTSCENE))
   {
@@ -213,6 +214,7 @@ void Input::update_mode()
     if (previous_mode != mode->value())
       emit("Input_mode", "changed");
   }
+#endif
 
   if (mode->value() == GAMEPAD)
   {
