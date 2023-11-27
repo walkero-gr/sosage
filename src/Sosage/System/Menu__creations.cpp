@@ -54,7 +54,7 @@ void Menu::init_controls_menu()
   auto controls_menu = set<C::Menu>("Controls", "menu");
 
   std::size_t menu_size = 3;
-  if (value<C::Simple<Input_mode>>(INTERFACE__INPUT_MODE) == GAMEPAD)
+  if (!Config::port && value<C::Simple<Input_mode>>(INTERFACE__INPUT_MODE) == GAMEPAD)
     menu_size = 5;
   controls_menu->split(VERTICALLY, menu_size);
   make_text_menu_title((*controls_menu)[0], "Controls");
@@ -71,7 +71,7 @@ void Menu::init_controls_menu()
   else // if (value<C::Simple<Input_mode>>(INTERFACE__INPUT_MODE) == GAMEPAD)
     text = locale_get("Controls_gamepad", "text");
 
-  if (value<C::Simple<Input_mode>>(INTERFACE__INPUT_MODE) == GAMEPAD)
+  if (!Config::port && value<C::Simple<Input_mode>>(INTERFACE__INPUT_MODE) == GAMEPAD)
     if (auto gamepad = request<C::String>("Gamepad", "id"))
     {
       auto info = value<C::Simple<Gamepad_info>>(gamepad->value(), "gamepad");
@@ -97,7 +97,7 @@ void Menu::init_controls_menu()
                                              Config::settings_menu_start));
   (*controls_menu)[1].init(img, pos);
 
-  if (value<C::Simple<Input_mode>>(INTERFACE__INPUT_MODE) == GAMEPAD)
+  if (!Config::port && value<C::Simple<Input_mode>>(INTERFACE__INPUT_MODE) == GAMEPAD)
   {
     int y = Config::settings_menu_start
             + 4 * (Config::settings_menu_height + Config::settings_menu_margin);

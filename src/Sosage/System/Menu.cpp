@@ -285,8 +285,8 @@ void Menu::run()
           if (pos != std::string::npos)
             active_item = std::string(entity.begin(), entity.begin() + pos);
         }
-        else if (contains (entity, "_button"))
-          active_item = entity;
+       if (contains(entity, "_button"))
+         active_item = entity;
 
         set<C::String>("Interface", "active_menu_item", active_item);
         set<C::String>("Interface", "gamepad_active_menu_item", active_item);
@@ -325,7 +325,7 @@ void Menu::init()
   for (const std::string& id : Config::exit_menu_items)
   {
     make_exit_menu_item ((*exit_menu)[idx], id, y);
-    y += Config::menu_margin;
+    y += int(Config::menu_margin * (7. / double(Config::exit_menu_items.size())));
     idx ++;
   }
 
@@ -771,7 +771,7 @@ void Menu::update_phone_menu()
 void Menu::update_end_menu()
 {
   auto end_menu = set<C::Menu>("End", "menu");
-  end_menu->split(VERTICALLY, 4);
+  end_menu->split(VERTICALLY, (Config::port ? 3 : 4));
   make_text_menu_title((*end_menu)[0], "End");
 
   auto reference = get<C::Position>("Menu", "reference");
@@ -799,9 +799,11 @@ void Menu::update_end_menu()
   int y = Config::settings_menu_start
           + 3 * (Config::settings_menu_height + Config::settings_menu_margin);
   make_exit_menu_item ((*end_menu)[2], "End_new_game", y);
-  y += Config::settings_menu_height + Config::settings_menu_margin;
-  make_exit_menu_item ((*end_menu)[3], "End_quit", y);
-
+  if constexpr (!Config::port)
+  {
+    y += Config::settings_menu_height + Config::settings_menu_margin;
+    make_exit_menu_item((*end_menu)[3], "End_quit", y);
+  }
 }
 
 
