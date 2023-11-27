@@ -240,8 +240,11 @@ void Input::handle_exit_pause_speed (const Event& ev)
 {
   if (ev == Event(KEY_UP, ESCAPE) ||
       ev == Event(KEY_UP, ANDROID_BACK) ||
-      ev == Event(BUTTON_UP, START) ||
-      ev == Event(BUTTON_UP, SELECT))
+      ev == Event(BUTTON_UP, START)
+#ifdef SOSAGE_RELEASE
+      || ev == Event(BUTTON_UP, SELECT)
+#endif
+      )
     emit ("Game", "escape");
 
   if (status()->is(CUTSCENE))
@@ -337,7 +340,7 @@ void Input::handle_debug_tools (const Event& ev)
 #endif
 
 #ifdef SOSAGE_DEV
-  if (ev == Event(KEY_UP, N))
+  if (ev == Event(KEY_UP, N) || ev == Event(BUTTON_UP, SELECT))
     emit("Game", "test");
 #endif
 
