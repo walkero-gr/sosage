@@ -101,14 +101,14 @@ void Input::run()
 
     handle_exit_pause_speed (ev);
 
+    update_active_gamepad(ev);
+
     if (status()->is (PAUSED))
       continue;
 
     handle_debug_tools (ev);
 
     update_window (ev);
-
-    update_active_gamepad (ev);
 
     if (ev.type() == MOUSE_MOVE
         && (mode->value() == MOUSE
