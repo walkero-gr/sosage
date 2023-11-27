@@ -52,6 +52,13 @@ constexpr_auto exit_menu_items
      , "Quit"
      #endif
   };
+constexpr_auto settings_menu_items
+= { "Language",
+#if !defined (SOSAGE_ANDROID) && !defined(SOSAGE_EMSCRIPTEN) && !defined(SOSAGE_PORT)
+    "Fullscreen",
+#endif
+    "Interface_scale", "Text_speed", "Music_volume", "Sound_volume" 
+  };
 constexpr_auto menus
 = {  "Exit", "Phone", "Settings", "Controls"
      #ifndef SOSAGE_EMSCRIPTEN

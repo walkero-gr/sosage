@@ -248,7 +248,7 @@ void Menu::run()
 
   const std::string& id = value<C::String>("Game", "current_menu");
   auto menu = get<C::Menu>(id , "menu");
-  bool settings = (id == "Settings" || id == "Controls");
+  bool settings = (id == "Settings" || (id == "Controls" && !Config::port));
 
   std::string active_item = "";
   std::string setting_item = "";
@@ -285,7 +285,7 @@ void Menu::run()
           if (pos != std::string::npos)
             active_item = std::string(entity.begin(), entity.begin() + pos);
         }
-       if (contains(entity, "_button"))
+       else if (contains(entity, "_button"))
          active_item = entity;
 
         set<C::String>("Interface", "active_menu_item", active_item);
@@ -369,22 +369,15 @@ void Menu::init()
 
 
   auto settings_menu = set<C::Menu>("Settings", "menu");
-  if constexpr (Config::emscripten || Config::android || Config::port)
-      settings_menu->split(VERTICALLY, 7);
-  else
-      settings_menu->split(VERTICALLY, 8);
+  settings_menu->split(VERTICALLY, Config::settings_menu_items.size() + 2);
 
   make_text_menu_title((*settings_menu)[0], "Settings");
   idx = 1;
   y = Config::settings_menu_start;
-  for (const std::string& id : { "Language",
-#if !defined (SOSAGE_ANDROID) && !defined(SOSAGE_EMSCRIPTEN) && !defined(SOSAGE_PORT)
-        "Fullscreen",
-#endif
-       "Interface_scale", "Text_speed", "Music_volume", "Sound_volume" })
+  for (const std::string& id : Config::settings_menu_items)
   {
     make_settings_item ((*settings_menu)[idx], id, y);
-    y += Config::settings_menu_height + Config::settings_menu_margin;
+    y += int((Config::settings_menu_height + Config::settings_menu_margin) * (6. / double(Config::settings_menu_items.size())));
     idx ++;
   }
   make_oknotok_item ((*settings_menu)[idx], true);
