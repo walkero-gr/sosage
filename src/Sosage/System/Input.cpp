@@ -588,10 +588,14 @@ void Input::finalize_gamepad (bool arrow_released)
 
 void Input::rumble_gamepad (double intensity, double duration)
 {
-  const std::string& gamepad = value<C::String>("Gamepad", "id");
-  int joystick_id = value<C::Int>(gamepad, "joystick_id");
-  auto ptr = value<C::Simple<Gamepad_ptr>>("Gamepad_" + to_string(joystick_id), "pointer");
-  m_core.rumble_gamepad (ptr, intensity, duration);
+  if (auto gp = request<C::String>("Gamepad", "id"))
+  {
+    debug << "Rumbling " << intensity << " during " << duration << "s" << std::endl;
+    const std::string& gamepad = gp->value();
+    int joystick_id = value<C::Int>(gamepad, "joystick_id");
+    auto ptr = value<C::Simple<Gamepad_ptr>>("Gamepad_" + to_string(joystick_id), "pointer");
+    m_core.rumble_gamepad(ptr, intensity, duration);
+  }
 }
 
 

@@ -177,9 +177,9 @@ void Logic::run ()
 #if 1
   if (receive ("Game", "test"))
   {
-    push_notification ("Test de notif", 1);
-    std::string achievement = push_notification("Test de succès", 3);
-    emit(achievement, "is_achievement");
+    double intensity = random_double(0, 30);
+    double duration = random_double(0, 3);
+    function_shake({ to_string(intensity), to_string(duration) });
   }
 #endif
 
@@ -1098,6 +1098,9 @@ std::string Logic::push_notification (const std::string& text, double duration)
 
   auto action = get<C::Action>("Notifications", "action");
   action->schedule (end_time, notif);
+
+  if (value<C::Simple<Input_mode>>(INTERFACE__INPUT_MODE) == GAMEPAD)
+    set<C::Pair<double, double>>("Gamepad", "rumble", 0.2, 0.05);
   return id;
 }
 

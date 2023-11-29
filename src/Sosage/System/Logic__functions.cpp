@@ -851,6 +851,9 @@ bool Logic::function_shake (const std::vector<std::string>& args)
   auto shake = set<C::Array<double,4>>("Camera", "shake", m_current_time, m_current_time + duration,
                                        intensity, value<C::Absolute_position>(CAMERA__POSITION).x());
   m_current_action->schedule (m_current_time + duration, shake);
+
+  if (value<C::Simple<Input_mode>>(INTERFACE__INPUT_MODE) == GAMEPAD)
+    set<C::Pair<double, double>>("Gamepad", "rumble", intensity / 40., duration * 0.75);
   return true;
 }
 

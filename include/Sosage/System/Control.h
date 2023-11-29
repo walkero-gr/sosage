@@ -135,6 +135,7 @@ private:
   Vector stick_direction();
   bool is_ok (const std::string& key);
   bool is_notok (const std::string& key);
+  void click_and_rumble();
 };
 
 } // namespace System

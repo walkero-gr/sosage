@@ -67,7 +67,7 @@ void Control::idle_gamepad()
     status()->push (m_status);
     end_status(IDLE);
     begin_status(m_status);
-    emit("Click", "play_sound");
+    click_and_rumble();
     emit ("Cancel", "action");
     const std::string& id = value<C::String>("Player", "name");
     remove(id , "path", true);
@@ -90,7 +90,7 @@ void Control::idle_gamepad()
         set<C::String>("Interface", "action_choice_target", active_object->value());
         status()->push (ACTION_CHOICE);
       }
-      emit("Click", "play_sound");
+      click_and_rumble();
     }
   }
 
@@ -200,12 +200,12 @@ void Control::action_choice_sub_triggered (const std::string& key)
   {
     set<C::String>("Interface", "target_object", target->value());
     status()->push (OBJECT_CHOICE);
-    emit("Click", "play_sound");
+    click_and_rumble();
     return;
   }
   set_action (target->value() + "_" + key, "Default_" + key);
   remove ("Interface", "action_choice_target", true);
-  emit("Click", "play_sound");
+  click_and_rumble();
 }
 
 void Control::object_choice_gamepad()
@@ -253,7 +253,7 @@ void Control::object_choice_sub_triggered (const std::string& key)
     set<C::String>("Interface", "previous_active_inventory_object", active_object->value());
     remove("Interface", "active_object");
     status()->pop();
-    emit("Click", "play_sound");
+    click_and_rumble();
   }
   else if (is_notok(key))
   {
@@ -262,7 +262,7 @@ void Control::object_choice_sub_triggered (const std::string& key)
     remove("Interface", "source_object", true);
     set<C::String>("Interface", "previous_active_inventory_object", active_object->value());
     remove("Interface", "active_object");
-    emit("Click", "play_sound");
+    click_and_rumble();
   }
 }
 
@@ -359,7 +359,7 @@ void Control::inventory_sub_triggered (const std::string& key)
     remove ("Interface", "active_object");
   }
 
-  emit("Click", "play_sound");
+  click_and_rumble();
 }
 
 void Control::window_gamepad()
@@ -404,7 +404,10 @@ void Control::code_gamepad()
   }
   else if (is_ok(received_key))
     if (code->click())
-      emit ("code", "button_clicked");
+    {
+      emit("code", "button_clicked");
+      set<C::Pair<double, double>>("Gamepad", "rumble", 0.05, 0.05);
+    }
 
   flush_gamepad_keys();
 }
@@ -427,7 +430,10 @@ void Control::dialog_gamepad()
       received_key = key;
 
   if (received_key == "look" || received_key == "inventory")
-    dialog_sub_click ();
+  {
+    dialog_sub_click();
+    set<C::Pair<double, double>>("Gamepad", "rumble", 0.05, 0.05);
+  }
 
   flush_gamepad_keys();
 }
@@ -842,6 +848,12 @@ bool Control::is_notok (const std::string& key)
       return key == "inventory";
   // else
   return key == "look";
+}
+
+void Control::click_and_rumble()
+{
+  emit("Click", "play_sound");
+  set<C::Pair<double, double>>("Gamepad", "rumble", 0.05, 0.05);
 }
 
 
