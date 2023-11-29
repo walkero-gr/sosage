@@ -224,7 +224,7 @@ if data["linux"]:
             run_cmd('schroot --chroot debian_bullseye -- sh -c "make -j ' + str(data["threads"]) + '"')
             run_cmd('schroot --chroot debian_bullseye -- sh -c "make install"')
             run_cmd("mkdir " + linux_buildir + "/" + appname + "/bin32")
-            run_cmd("mv install/bin/" + gamename + " ../" + linux_buildir + appname + "/bin32/")
+            run_cmd("mv install/bin/" + gamename + " " + linux_buildir + "/" + appname + "/bin32/")
         chdir(cwd)
         end = time.perf_counter()
         print("  -> done in " + str(int(end - begin)) + "s\n")
