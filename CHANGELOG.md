@@ -7,6 +7,24 @@ History of versions and modifications of the SOSAGE engine.
 ### Release Management
 
 - License change (from GPL to MIT)
+- Add a way to handle an external console port
+- Fix compilation on Visual Studio
+- Separate packaged and unpackaged compilation
+- Game now depends on SDL2 Image *or* LZ4 (depending on packaged
+  status)
+- SCAP is moved to its own cmake project
+
+### Interface and menus
+
+- Better distribution of items when some are ignored (Android, port)
+
+### Bug fixes
+
+- Crash when disconnecting gamepads connected during pause
+
+### Game Engine
+
+- Gamepad rumble
 
 ## `v1.5.5 (achievements5)` - 2023-10-09
 

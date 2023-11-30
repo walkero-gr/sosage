@@ -30,7 +30,7 @@
   Author(s): Simon Giraudot <sosage@ptilouk.net>
 */
 
-#ifdef SOSAGE_PACKAGED
+#if defined(SOSAGE_PACKAGE) || defined(SOSAGE_SCAP)
 
 #include <Sosage/Third_party/LZ4.h>
 #include <Sosage/Utils/Packaged_asset_manager.h>

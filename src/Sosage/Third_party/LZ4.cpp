@@ -30,7 +30,7 @@
   Author(s): Simon Giraudot <sosage@ptilouk.net>
 */
 
-#ifdef SOSAGE_PACKAGED
+#if defined(SOSAGE_PACKAGED) || defined(SOSAGE_SCAP)
 
 #include <Sosage/Third_party/LZ4.h>
 #include <Sosage/Utils/conversions.h>

@@ -33,7 +33,7 @@
 #ifndef SOSAGE_UTILS_PACKAGED_ASSET_MANAGER_H
 #define SOSAGE_UTILS_PACKAGED_ASSET_MANAGER_H
 
-#ifdef SOSAGE_PACKAGED
+#if defined(SOSAGE_PACKAGE) || defined(SOSAGE_SCAP)
 
 #include <Sosage/Third_party/SDL_file.h>
 #include <Sosage/Utils/binary_io.h>

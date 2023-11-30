@@ -54,6 +54,7 @@ set(SCAP_SRC
   "../../src/Sosage/Third_party/SDL_file.cpp"
   "../../src/Sosage/Utils/asset_packager.cpp"
   "../../src/Sosage/Utils/Packaged_asset_manager.cpp"
+  "../../src/Sosage/Utils/Unpackaged_asset_manager.cpp"
   "../../src/Sosage/Utils/Bitmap_2.cpp"
   "../../src/Sosage/Utils/binary_io.cpp"
   "../../src/Sosage/Utils/color.cpp"
@@ -68,4 +69,4 @@ target_include_directories(SCAP PUBLIC ${SCAP_INCLUDE_DIRECTORIES})
 target_link_libraries(SCAP ${SCAP_LINK_LIBRARIES} "tbb")
 target_compile_definitions(SCAP PUBLIC
   ${SCAP_COMPILE_DEFINITIONS}
-  "SOSAGE_SCAP" "SOSAGE_PACKAGED")
+  "SOSAGE_SCAP")

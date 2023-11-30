@@ -33,7 +33,7 @@
 #ifndef SOSAGE_THIRD_PARTY_LZ4_H
 #define SOSAGE_THIRD_PARTY_LZ4_H
 
-#ifdef SOSAGE_PACKAGED
+#if defined(SOSAGE_PACKAGED) || defined(SOSAGE_SCAP)
 
 #include <Sosage/Utils/binary_io.h>
 

@@ -35,7 +35,8 @@
 #include <Sosage/Component/Ground_map.h>
 #include <Sosage/Third_party/LZ4.h>
 #include <Sosage/Third_party/SDL.h>
-#include <Sosage/Core/Asset_manager.h>
+#include <Sosage/Utils/Packaged_asset_manager.h>
+#include <Sosage/Utils/Unpackaged_asset_manager.h>
 #include <Sosage/Utils/asset_packager.h>
 #include <Sosage/Utils/conversions.h>
 #include <Sosage/Utils/binary_io.h>
@@ -255,7 +256,7 @@ void compile_package (const std::string& input_folder, const std::string& output
   std::string root = input_folder + "/data/";
 
   Package_files files = open_packages(output_folder + "/data/");
-  Asset_manager::init(root, true);
+  Unpackaged_asset_manager::init(root, true);
 
   std::size_t root_size = root.size();
   if (root[root.size() - 1] != '/')
@@ -331,7 +332,7 @@ void compile_package (const std::string& input_folder, const std::string& output
 
 void decompile_package (const std::string& ifolder, std::string folder)
 {
-  if (!Asset_manager::init(ifolder))
+  if (!Packaged_asset_manager::init(ifolder))
   {
     debug << "Asset manager could not use " << ifolder << std::endl;
     return;
@@ -339,7 +340,7 @@ void decompile_package (const std::string& ifolder, std::string folder)
 
   folder += '/';
 
-  for (const auto& asset : Asset_manager::asset_map())
+  for (const auto& asset : Packaged_asset_manager::asset_map())
   {
     const std::string& fname = asset.first;
 
@@ -364,7 +365,7 @@ void decompile_package (const std::string& ifolder, std::string folder)
         continue;
 
       int width, height, format_int;
-      std::tie (width, height, format_int) = Asset_manager::image_info (fname);
+      std::tie (width, height, format_int) = Packaged_asset_manager::image_info (fname);
       Uint32 nb_x = Splitter::nb_sub (width);
       Uint32 nb_y = Splitter::nb_sub (height);
       SDL_Surface* surf
@@ -390,7 +391,7 @@ void decompile_package (const std::string& ifolder, std::string folder)
               = SDL_CreateRGBSurfaceWithFormat
                 (0, rect.w, rect.h, 32, format_int);
           SDL_LockSurface (sub);
-          Asset_manager::open (fname, sub->pixels, x, y);
+          Packaged_asset_manager::open (fname, sub->pixels, x, y);
           SDL_UnlockSurface (sub);
           SDL_BlitSurface (sub, nullptr, surf, &rect);
           SDL_FreeSurface(sub);
@@ -411,7 +412,7 @@ void decompile_package (const std::string& ifolder, std::string folder)
       directories_to_create.resize (directories_to_create.find_last_of('/'));
       std::filesystem::create_directories(directories_to_create);
 
-      Asset asset = Asset_manager::open(fname);
+      Packaged_asset asset = Packaged_asset_manager::open(fname);
       std::ofstream ofile(ofname, std::ios::binary);
       binary_write (ofile, *asset.buffer());
       asset.close();
