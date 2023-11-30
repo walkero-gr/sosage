@@ -35,7 +35,12 @@
 
 #if defined(SOSAGE_PACKAGED) || defined(SOSAGE_SCAP)
 
+#include <Sosage/Config/platform.h>
+#ifdef SOSAGE_PORT
+#include <Sosage/Third_party/Port.h>
+#endif
 #include <Sosage/Third_party/SDL_file.h>
+
 #include <Sosage/Utils/binary_io.h>
 #include <Sosage/Utils/helpers.h>
 
@@ -45,7 +50,11 @@
 namespace Sosage
 {
 
+#ifdef SOSAGE_PORT
+namespace IO = Core::Port::File_IO;
+#else
 namespace IO = Third_party::SDL_file;
+#endif
 
 constexpr_auto packages = { "general", "locale", "images", "images_animations", "images_scenery", "sounds" };
 
