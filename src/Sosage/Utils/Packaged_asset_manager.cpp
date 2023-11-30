@@ -141,7 +141,12 @@ bool Packaged_asset_manager::init (const std::string& folder, bool scap_mode)
   std::size_t buffer_id = 0;
   for (const std::string& package : packages)
   {
-    Packaged_asset asset = open (package + ".data", true);
+    Packaged_asset fasset = open (package + ".data", true);
+    buffers[buffer_id].resize(fasset.size());
+    fasset.read(buffers[buffer_id].data(), fasset.size());
+    fasset.close();
+
+    Packaged_asset asset(&buffers[buffer_id]);
 
     std::size_t end = 0;
     while (true)
@@ -260,10 +265,6 @@ bool Packaged_asset_manager::init (const std::string& folder, bool scap_mode)
       package_asset_map.insert (std::make_pair (fname, passet));
     }
 
-    asset.seek(0);
-    buffers[buffer_id].resize(end);
-    asset.read(buffers[buffer_id].data(), end);
-    asset.close();
 
     ++ buffer_id;
   }
