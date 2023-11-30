@@ -46,7 +46,7 @@ std::string Unpackaged_asset_manager::folder_name = "";
 
 Unpackaged_asset::Unpackaged_asset (const std::string& filename, bool write)
 {
-  m_base = IO::open(filename, write);
+  m_base = Core::File_IO::open(filename, write);
 }
 
 Unpackaged_asset::Unpackaged_asset() { }
@@ -58,7 +58,7 @@ Unpackaged_asset::operator bool() const
 
 void Unpackaged_asset::close()
 {
-  IO::close(m_base);
+  Core::File_IO::close(m_base);
 }
 
 SDL_RWops* Unpackaged_asset::base()
@@ -78,27 +78,27 @@ std::size_t Unpackaged_asset::size() const
 
 std::size_t Unpackaged_asset::read (void* ptr, std::size_t max_num)
 {
-  return IO::read (m_base, ptr, max_num);
+  return Core::File_IO::read (m_base, ptr, max_num);
 }
 
 void Unpackaged_asset::write (const std::string& str)
 {
-  IO::write (m_base, str.c_str());
+  Core::File_IO::write (m_base, str.c_str());
 }
 
 std::size_t Unpackaged_asset::tell()
 {
-  return IO::tell(m_base);
+  return Core::File_IO::tell(m_base);
 }
 
 void Unpackaged_asset::seek (std::size_t pos)
 {
-  IO::seek(m_base, pos);
+  Core::File_IO::seek(m_base, pos);
 }
 
 void Unpackaged_asset::binary_read (Buffer& b)
 {
-  IO::read (m_base, b.data(), b.size());
+  Core::File_IO::read (m_base, b.data(), b.size());
 }
 
 
@@ -116,7 +116,7 @@ bool Unpackaged_asset_manager::init (const std::string& folder, bool scap_mode)
 
 Unpackaged_asset Unpackaged_asset_manager::open_pref (const std::string& filename, bool write)
 {
-  return Unpackaged_asset (IO::pref_path() + filename, write);
+  return Unpackaged_asset (Core::File_IO::pref_path() + filename, write);
 }
 
 Unpackaged_asset Unpackaged_asset_manager::open (const std::string& filename, bool)

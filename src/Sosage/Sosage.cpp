@@ -8,7 +8,7 @@ int main (int argc, char** argv)
   Sosage::Engine sosage(argc, argv);
 
 #ifdef SOSAGE_INSTALL_DATA_FOLDER
-  if (sosage.run(Sosage::Third_party::SDL_file::base_path() + SOSAGE_INSTALL_DATA_FOLDER))
+  if (sosage.run(Sosage::Core::File_IO::base_path() + SOSAGE_INSTALL_DATA_FOLDER))
   {
     return EXIT_SUCCESS;
   }

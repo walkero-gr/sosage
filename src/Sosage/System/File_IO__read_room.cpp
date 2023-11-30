@@ -59,7 +59,7 @@ namespace Sosage::System
 
 namespace C = Component;
 
-void File_IO::read_character (const std::string& id, const Core::File_IO::Node& input)
+void File_IO::read_character (const std::string& id, const Core::Parser::Node& input)
 {
   int x = input["coordinates"][0].integer();
   int y = input["coordinates"][1].integer();
@@ -160,10 +160,10 @@ void File_IO::read_character (const std::string& id, const Core::File_IO::Node& 
 }
 
 void File_IO::read_character_skin (const std::string& id,
-                                   const Core::File_IO::Node& input,
+                                   const Core::Parser::Node& input,
                                    const std::string& default_state)
 {
-  const Core::File_IO::Node& skin = input["skin"];
+  const Core::Parser::Node& skin = input["skin"];
   auto state_handle = get<C::String>(id , "state");
   auto position = get<C::Position>(id, "position");
   bool looking_right = input["looking_right"].boolean();
@@ -311,7 +311,7 @@ void File_IO::read_room (const std::string& file_name)
 
   callback->value()();
 
-  Core::File_IO input ("data/rooms/" + file_name + ".yaml");
+  Core::Parser input ("data/rooms/" + file_name + ".yaml");
   input.parse();
 
   callback->value()();
@@ -370,12 +370,12 @@ void File_IO::read_room (const std::string& file_name)
     if (input.has(section))
       for (std::size_t i = 0; i < input[section].size(); ++ i)
       {
-        const Core::File_IO::Node& s = input[section][i];
+        const Core::Parser::Node& s = input[section][i];
         if (s.string() == "")
           func (s["id"].string(), s);
         else
         {
-          Core::File_IO subfile ("data/" + section + "/" + s.string() + ".yaml");
+          Core::Parser subfile ("data/" + section + "/" + s.string() + ".yaml");
           bool okay = subfile.parse();
           check(okay, "Can't open data/" + section + "/" + s.string() + ".yaml");
           func (s.string(), subfile.root());
@@ -390,7 +390,7 @@ void File_IO::read_room (const std::string& file_name)
   for (std::size_t i = 0; i < inventory->size(); ++ i)
     if (!request<C::String>(inventory->get(i) , "name"))
     {
-      Core::File_IO subfile ("data/objects/" + inventory->get(i) + ".yaml");
+      Core::Parser subfile ("data/objects/" + inventory->get(i) + ".yaml");
       subfile.parse();
       read_object (inventory->get(i), subfile.root());
       callback->value();
@@ -399,7 +399,7 @@ void File_IO::read_room (const std::string& file_name)
     for (std::size_t i = 0; i < numbers->value().size(); ++ i)
       if (!request<C::Action>(numbers->value()[i], "action"))
       {
-        Core::File_IO subfile ("data/actions/" + numbers->value()[i] + ".yaml");
+        Core::Parser subfile ("data/actions/" + numbers->value()[i] + ".yaml");
         subfile.parse();
         read_action (numbers->value()[i], subfile.root());
         callback->value();
@@ -438,7 +438,7 @@ void File_IO::read_room (const std::string& file_name)
   SOSAGE_TIMER_STOP(File_IO__read_room);
 }
 
-void File_IO::read_animation (const std::string& id, const Core::File_IO::Node& node)
+void File_IO::read_animation (const std::string& id, const Core::Parser::Node& node)
 {
   int x = node["coordinates"][0].integer();
   int y = node["coordinates"][1].integer();
@@ -495,7 +495,7 @@ void File_IO::read_animation (const std::string& id, const Core::File_IO::Node& 
   debug << "Animation " << id << " at position " << img->z() << std::endl;
 }
 
-void File_IO::read_code (const std::string& id, const Core::File_IO::Node& input)
+void File_IO::read_code (const std::string& id, const Core::Parser::Node& input)
 {
   std::string button_sound = input["button_sound"].string("sounds", "effects", "ogg");
   set<C::Sound>(id + "_button", "sound", button_sound);
@@ -512,7 +512,7 @@ void File_IO::read_code (const std::string& id, const Core::File_IO::Node& input
 
   for (std::size_t j = 0; j < input["states"].size(); ++ j)
   {
-    const Core::File_IO::Node& istate = input["states"][j];
+    const Core::Parser::Node& istate = input["states"][j];
 
     std::string state = istate["id"].string();
 
@@ -561,11 +561,11 @@ void File_IO::read_code (const std::string& id, const Core::File_IO::Node& input
 
   for (std::size_t j = 0; j < input["buttons"].size(); ++ j)
   {
-    const Core::File_IO::Node& ibutton = input["buttons"][j];
+    const Core::Parser::Node& ibutton = input["buttons"][j];
 
     std::string value = ibutton["value"].string();
 
-    const Core::File_IO::Node& coordinates = ibutton["coordinates"];
+    const Core::Parser::Node& coordinates = ibutton["coordinates"];
     code->add_button (value,
                       coordinates[0].integer(),
                       coordinates[1].integer(),
@@ -592,7 +592,7 @@ void File_IO::read_code (const std::string& id, const Core::File_IO::Node& input
   }
 }
 
-void File_IO::read_dialog (const std::string& id, const Core::File_IO::Node& input)
+void File_IO::read_dialog (const std::string& id, const Core::Parser::Node& input)
 {
   auto dialog = set<C::Dialog>(id , "dialog",
                                input.has("end") ? input["end"].string() : "");
@@ -607,14 +607,14 @@ void File_IO::read_dialog (const std::string& id, const Core::File_IO::Node& inp
   C::Dialog::GVertex latest_vertex = dialog->vertex_in();
   for (std::size_t i = 0; i < input["lines"].size(); ++ i)
   {
-    const Core::File_IO::Node& l = input["lines"][i];
+    const Core::Parser::Node& l = input["lines"][i];
 
     if (l.has("choices"))
     {
       C::Dialog::GVertex vertex = dialog->add_vertex ();
       for (std::size_t j = 0; j < l["choices"].size(); ++ j)
       {
-        const Core::File_IO::Node& c = l["choices"][j];
+        const Core::Parser::Node& c = l["choices"][j];
         std::string line = c["line"].string();
         std::string condition = "";
         bool unless = false;
@@ -676,7 +676,7 @@ void File_IO::read_dialog (const std::string& id, const Core::File_IO::Node& inp
         std::get<2>(g), std::get<3>(g), std::get<4>(g), std::get<5>(g));
 }
 
-void File_IO::read_integer (const std::string& id, const Core::File_IO::Node& node)
+void File_IO::read_integer (const std::string& id, const Core::Parser::Node& node)
 {
   int value = node["value"].integer();
   auto integer = request<C::Int>(id , "value");
@@ -686,7 +686,7 @@ void File_IO::read_integer (const std::string& id, const Core::File_IO::Node& no
   if (node.has("triggers"))
     for (std::size_t i = 0; i < node["triggers"].size(); ++ i)
     {
-      const Core::File_IO::Node& itrigger = node["triggers"][i];
+      const Core::Parser::Node& itrigger = node["triggers"][i];
 
       std::string value = itrigger["value"].string();
 
@@ -700,7 +700,7 @@ void File_IO::read_integer (const std::string& id, const Core::File_IO::Node& no
     }
 }
 
-void File_IO::read_object (const std::string& id, const Core::File_IO::Node& input)
+void File_IO::read_object (const std::string& id, const Core::Parser::Node& input)
 {
   auto state_handle = get_or_set<C::String>(id , "state");
 
@@ -742,7 +742,7 @@ void File_IO::read_object (const std::string& id, const Core::File_IO::Node& inp
   C::String_conditional_handle conditional_handle;
   for (std::size_t j = 0; j < input["states"].size(); ++ j)
   {
-    const Core::File_IO::Node& istate = input["states"][j];
+    const Core::Parser::Node& istate = input["states"][j];
 
     std::string state = istate["id"].string();
 
@@ -844,7 +844,7 @@ void File_IO::read_object (const std::string& id, const Core::File_IO::Node& inp
     }
 }
 
-void File_IO::read_action (const std::string& id, const Core::File_IO::Node& node)
+void File_IO::read_action (const std::string& id, const Core::Parser::Node& node)
 {
   if (node.has("label"))
     set<C::String>(id , "label", node["label"].string());
@@ -856,7 +856,7 @@ void File_IO::read_action (const std::string& id, const Core::File_IO::Node& nod
 
     for (std::size_t i = 0; i < node["states"].size(); ++ i)
     {
-      const Core::File_IO::Node& istate = node["states"][i];
+      const Core::Parser::Node& istate = node["states"][i];
 
       std::string state = istate["id"].string();
       if (i == 0 && state_handle->value() == "")
@@ -882,7 +882,7 @@ void File_IO::read_action (const std::string& id, const Core::File_IO::Node& nod
 
     for (std::size_t i = 0; i < node["modes"].size(); ++ i)
     {
-      const Core::File_IO::Node& imode = node["modes"][i];
+      const Core::Parser::Node& imode = node["modes"][i];
       std::string mode_id = imode["id"].string();
 
       Input_mode mode;
@@ -925,7 +925,7 @@ void File_IO::read_action (const std::string& id, const Core::File_IO::Node& nod
   }
 }
 
-void File_IO::read_music(const std::string& id, const Core::File_IO::Node& node)
+void File_IO::read_music(const std::string& id, const Core::Parser::Node& node)
 {
   // Do not reload if it's already playing
   if (auto current = request<C::Music>("Game", "music"))
@@ -947,7 +947,7 @@ void File_IO::read_music(const std::string& id, const Core::File_IO::Node& node)
 
   for (std::size_t i = 0; i < node["sources"].size(); ++ i)
   {
-    const Core::File_IO::Node& isource= node["sources"][i];
+    const Core::Parser::Node& isource= node["sources"][i];
     std::string sid = isource["id"].string();
     std::vector<double> mix (music->tracks());
     for (std::size_t j = 0; j < music->tracks(); ++ j)
@@ -968,7 +968,7 @@ void File_IO::read_music(const std::string& id, const Core::File_IO::Node& node)
 
 std::pair<C::Handle, C::Handle>
 File_IO::read_object_action (const std::string& id, const std::string& action,
-                             const Core::File_IO::Node& node)
+                             const Core::Parser::Node& node)
 {
   if (node.size() != 0)
   {
@@ -1036,7 +1036,7 @@ File_IO::read_object_action (const std::string& id, const std::string& action,
   return out;
 }
 
-void File_IO::read_scenery (const std::string& id, const Core::File_IO::Node& node)
+void File_IO::read_scenery (const std::string& id, const Core::Parser::Node& node)
 {
   int x = node["coordinates"][0].integer();
   int y = node["coordinates"][1].integer();
@@ -1051,7 +1051,7 @@ void File_IO::read_scenery (const std::string& id, const Core::File_IO::Node& no
     auto state_handle = get_or_set<C::String>(id , "state");
     for (std::size_t i = 0; i < node["states"].size(); ++ i)
     {
-      const Core::File_IO::Node& istate = node["states"][i];
+      const Core::Parser::Node& istate = node["states"][i];
       std::string state = istate["id"].string();
 
       if (i == 0)
@@ -1101,14 +1101,14 @@ void File_IO::read_scenery (const std::string& id, const Core::File_IO::Node& no
   }
 }
 
-void File_IO::read_sound (const std::string& id, const Core::File_IO::Node& node)
+void File_IO::read_sound (const std::string& id, const Core::Parser::Node& node)
 {
   std::string sound = node["sound"].string("sounds", "effects", "ogg");
   set<C::Sound>(id , "sound", sound);
   debug << "SOUND = " << id  << ":sound" << std::endl;
 }
 
-void File_IO::read_text (const std::string& id, const Core::File_IO::Node& node)
+void File_IO::read_text (const std::string& id, const Core::Parser::Node& node)
 {
  std::string text = node["text"].string();
  if (node.has("coordinates"))
@@ -1126,7 +1126,7 @@ void File_IO::read_text (const std::string& id, const Core::File_IO::Node& node)
    set<C::String>(id, "text", text);
 }
 
-void File_IO::read_window (const std::string& id, const Core::File_IO::Node& node)
+void File_IO::read_window (const std::string& id, const Core::Parser::Node& node)
 {
   std::string skin = node["skin"].string("images", "windows", "png");
 

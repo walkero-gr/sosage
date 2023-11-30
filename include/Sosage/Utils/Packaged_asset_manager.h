@@ -36,11 +36,7 @@
 #if defined(SOSAGE_PACKAGED) || defined(SOSAGE_SCAP)
 
 #include <Sosage/Config/platform.h>
-#ifdef SOSAGE_PORT
-#include <Sosage/Third_party/Port.h>
-#endif
-#include <Sosage/Third_party/SDL_file.h>
-
+#include <Sosage/Core/File_IO.h>
 #include <Sosage/Utils/binary_io.h>
 #include <Sosage/Utils/helpers.h>
 
@@ -50,19 +46,13 @@
 namespace Sosage
 {
 
-#ifdef SOSAGE_PORT
-namespace IO = Core::Port::File_IO;
-#else
-namespace IO = Third_party::SDL_file;
-#endif
-
 constexpr_auto packages = { "general", "locale", "images", "images_animations", "images_scenery", "sounds" };
 
 class Packaged_asset_manager;
 
 class Packaged_asset
 {
-  IO::Asset m_base;
+  Core::File_IO::Asset m_base;
   Buffer* m_buffer;
 
   Packaged_asset (const std::string& filename, bool write = false);
@@ -86,7 +76,7 @@ public:
   T binary_read ()
   {
     T t;
-    IO::read (m_base, &t, sizeof(T));
+    Core::File_IO::read (m_base, &t, sizeof(T));
     return t;
   }
   void binary_read (Buffer& b);

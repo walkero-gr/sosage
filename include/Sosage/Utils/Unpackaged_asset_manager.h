@@ -35,7 +35,7 @@
 
 #ifndef SOSAGE_PACKAGED
 
-#include <Sosage/Third_party/SDL_file.h>
+#include <Sosage/Core/File_IO.h>
 #include <Sosage/Utils/binary_io.h>
 
 #include <unordered_map>
@@ -43,13 +43,11 @@
 namespace Sosage
 {
 
-namespace IO = Third_party::SDL_file;
-
 class Unpackaged_asset_manager;
 
 class Unpackaged_asset
 {
-  IO::Asset m_base;
+  Core::File_IO::Asset m_base;
 
   Unpackaged_asset (const std::string& filename, bool write = false);
 
@@ -70,7 +68,7 @@ public:
   T binary_read ()
   {
     T t;
-    IO::read (m_base, &t, sizeof(T));
+    Core::File_IO::read (m_base, &t, sizeof(T));
     return t;
   }
   void binary_read (Buffer& b);

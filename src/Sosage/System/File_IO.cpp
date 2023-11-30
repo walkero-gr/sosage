@@ -194,7 +194,7 @@ void File_IO::clean_content()
     remove("Follower", "name", true);
 
     // Reload global objects when restarting the game
-    Core::File_IO input ("data/init.yaml");
+    Core::Parser input ("data/init.yaml");
     input.parse();
     read_init_global_items (input);
   }
@@ -230,7 +230,7 @@ void File_IO::read_config()
   int window_height = -1;
 #endif
 
-  Core::File_IO input ("config" + value<C::String>("Save", "suffix", "") +  ".yaml", true);
+  Core::Parser input ("config" + value<C::String>("Save", "suffix", "") +  ".yaml", true);
   if (input.parse())
   {
     if (input.has("locale")) locale = input["locale"].string();
@@ -289,7 +289,7 @@ void File_IO::read_config()
 
 void File_IO::write_config()
 {
-  Core::File_IO output ("config" + value<C::String>("Save", "suffix", "") +  ".yaml", true, true);
+  Core::Parser output ("config" + value<C::String>("Save", "suffix", "") +  ".yaml", true, true);
 
   output.write ("locale", value<C::String>(GAME__CURRENT_LOCAL));
   output.write ("fullscreen", value<C::Boolean>("Window", "fullscreen"));
@@ -321,7 +321,7 @@ void File_IO::write_config()
 
 bool File_IO::read_savefile (const std::string& save_id)
 {
-  Core::File_IO input ("save" + value<C::String>("Save", "suffix", "") +
+  Core::Parser input ("save" + value<C::String>("Save", "suffix", "") +
                        + "_" + save_id + ".yaml", true);
   if (!input.parse())
   {
@@ -367,7 +367,7 @@ bool File_IO::read_savefile (const std::string& save_id)
   if (input.has("music_positions"))
     for (std::size_t i = 0; i < input["music_positions"].size(); ++ i)
     {
-      const Core::File_IO::Node& iresume = input["music_positions"][i];
+      const Core::Parser::Node& iresume = input["music_positions"][i];
       auto ra = set<C::Double>(iresume["id"].string(), "resume_at",
           iresume["value"].floating());
     }
@@ -376,7 +376,7 @@ bool File_IO::read_savefile (const std::string& save_id)
   std::unordered_map<std::string, std::string> char_anims;
   for (std::size_t i = 0; i < input["characters"].size(); ++ i)
   {
-    const Core::File_IO::Node& ichar = input["characters"][i];
+    const Core::Parser::Node& ichar = input["characters"][i];
     looking_right.insert (std::make_pair(ichar["id"].string(), ichar["value"].string()));
     if (ichar.has("animation"))
       char_anims.insert (std::make_pair (ichar["id"].string(), ichar["animation"].string()));
@@ -384,7 +384,7 @@ bool File_IO::read_savefile (const std::string& save_id)
 
   for (std::size_t i = 0; i < input["states"].size(); ++ i)
   {
-    const Core::File_IO::Node& istate = input["states"][i];
+    const Core::Parser::Node& istate = input["states"][i];
     auto state = get_or_set<C::String>(istate["id"].string() , "state");
     state->set (istate["value"].string());
     state->mark_as_altered();
@@ -392,14 +392,14 @@ bool File_IO::read_savefile (const std::string& save_id)
 
   for (std::size_t i = 0; i < input["signals"].size(); ++ i)
   {
-    const Core::File_IO::Node& isignal = input["signals"][i];
+    const Core::Parser::Node& isignal = input["signals"][i];
     emit (isignal.string(), "signal");
   }
 
   if (input.has("achievements"))
     for (std::size_t i = 0; i < input["achievements"].size(); ++ i)
     {
-      const Core::File_IO::Node& iach = input["achievements"][i];
+      const Core::Parser::Node& iach = input["achievements"][i];
       emit (iach["id"].string(), "done");
       if (iach["stored"].boolean())
         emit (iach["id"].string(), "stored");
@@ -407,7 +407,7 @@ bool File_IO::read_savefile (const std::string& save_id)
 
   for (std::size_t i = 0; i < input["positions"].size(); ++ i)
   {
-    const Core::File_IO::Node& iposition = input["positions"][i];
+    const Core::Parser::Node& iposition = input["positions"][i];
     std::string id = iposition["id"].string();
     const auto& values = iposition["value"];
     Point point (values[0].floating(), values[1].floating());
@@ -432,7 +432,7 @@ bool File_IO::read_savefile (const std::string& save_id)
 
   for (std::size_t i = 0; i < input["integers"].size(); ++ i)
   {
-    const Core::File_IO::Node& iint = input["integers"][i];
+    const Core::Parser::Node& iint = input["integers"][i];
     auto integer = set<C::Int>(iint["id"].string() , "value", iint["value"].integer());
     integer->mark_as_altered();
   }
@@ -442,7 +442,7 @@ bool File_IO::read_savefile (const std::string& save_id)
 
   for (std::size_t i = 0; i < input["active_animations"].size(); ++ i)
   {
-    const Core::File_IO::Node& ianimation = input["active_animations"][i];
+    const Core::Parser::Node& ianimation = input["active_animations"][i];
     action->add ("play", { ianimation.string() });
   }
 
@@ -458,7 +458,7 @@ bool File_IO::read_savefile (const std::string& save_id)
 void File_IO::write_savefile()
 {
   auto save_id = get<C::String>("Savegame", "id");
-  Core::File_IO output ("save" + value<C::String>("Save", "suffix", "") + "_" + save_id->value() + ".yaml", true, true);
+  Core::Parser output ("save" + value<C::String>("Save", "suffix", "") + "_" + save_id->value() + ".yaml", true, true);
   remove (save_id);
 
   int date = std::time(nullptr);
@@ -613,7 +613,7 @@ void File_IO::write_savefile()
 
 void File_IO::read_init ()
 {
-  Core::File_IO input ("data/init.yaml");
+  Core::Parser input ("data/init.yaml");
   input.parse();
 
   read_init_general (input);
@@ -633,7 +633,7 @@ void File_IO::read_init ()
   read_locale();
 }
 
-void File_IO::read_init_general (const Core::File_IO& input)
+void File_IO::read_init_general (const Core::Parser& input)
 {
   std::string data_version = input["data_version"].string();
   std::string data_variant = input["data_variant"].string();
@@ -694,7 +694,7 @@ void File_IO::read_init_general (const Core::File_IO& input)
   set<C::Font> ("Dialog", "font", dialog_font, 80);
 }
 
-void File_IO::read_init_achievement (const Core::File_IO& input)
+void File_IO::read_init_achievement (const Core::Parser& input)
 {
   if (input.has("achievements"))
   {
@@ -702,7 +702,7 @@ void File_IO::read_init_achievement (const Core::File_IO& input)
 
     for (std::size_t i = 0; i < input["achievements"].size(); ++ i)
     {
-      const Core::File_IO::Node& iach = input["achievements"][i];
+      const Core::Parser::Node& iach = input["achievements"][i];
 
       achievements->push_back (iach[0].string());
       set<C::String>(iach[0].string(), "text", iach[1].string());
@@ -732,7 +732,7 @@ void File_IO::read_init_achievement (const Core::File_IO& input)
   }
 }
 
-void File_IO::read_init_cursor (const Core::File_IO& input)
+void File_IO::read_init_cursor (const Core::Parser& input)
 {
   std::string cursor = input["cursor"][0].string("images", "interface", "png");
   auto cursor_default = C::make_handle<C::Image> ("Cursor", "image", cursor, Config::cursor_depth);
@@ -778,7 +778,7 @@ void File_IO::read_init_cursor (const Core::File_IO& input)
   cursor_img->add("selected", big_circle_img);
 }
 
-void File_IO::read_init_inventory (const Core::File_IO& input)
+void File_IO::read_init_inventory (const Core::Parser& input)
 {
   std::string left_arrow = input["inventory_arrows"][0].string("images", "interface", "png");
   auto left_arrow_img = set<C::Image>("Left_arrow", "image", left_arrow, Config::inventory_depth, PIXEL_PERFECT);
@@ -792,7 +792,7 @@ void File_IO::read_init_inventory (const Core::File_IO& input)
   chamfer_img->z() = Config::interface_depth;
 }
 
-void File_IO::read_init_interface (const Core::File_IO& input)
+void File_IO::read_init_interface (const Core::Parser& input)
 {
   std::string click_sound = input["click_sound"].string("sounds", "effects", "ogg");
   set<C::Sound>("Click", "sound", click_sound);
@@ -904,11 +904,11 @@ void File_IO::read_init_interface (const Core::File_IO& input)
   menu_settings_button->on() = false;
 }
 
-void File_IO::read_init_functions (const Core::File_IO& input)
+void File_IO::read_init_functions (const Core::Parser& input)
 {
   for (std::size_t i = 0; i < input["functions"].size(); ++ i)
   {
-    const Core::File_IO::Node& imeta = input["functions"][i];
+    const Core::Parser::Node& imeta = input["functions"][i];
     std::string id = imeta["id"].string();
     capitalize(id);
     auto action = set<C::Action>(id, "function");
@@ -920,7 +920,7 @@ void File_IO::read_init_functions (const Core::File_IO& input)
   }
 }
 
-void File_IO::read_init_global_items (const Core::File_IO& input)
+void File_IO::read_init_global_items (const Core::Parser& input)
 {
   for (const auto& d : m_dispatcher)
   {
@@ -929,8 +929,8 @@ void File_IO::read_init_global_items (const Core::File_IO& input)
     if (input.has(section))
       for (std::size_t i = 0; i < input[section].size(); ++ i)
       {
-        const Core::File_IO::Node& s = input[section][i];
-        Core::File_IO subfile ("data/" + section + "/" + s.string() + ".yaml");
+        const Core::Parser::Node& s = input[section][i];
+        Core::Parser subfile ("data/" + section + "/" + s.string() + ".yaml");
         bool okay = subfile.parse();
         check(okay, "Can't open data/" + section + "/" + s.string() + ".yaml");
         emit (s.string(), "is_global");
@@ -939,11 +939,11 @@ void File_IO::read_init_global_items (const Core::File_IO& input)
   }
 }
 
-void File_IO::read_init_text_defaults (const Core::File_IO& input)
+void File_IO::read_init_text_defaults (const Core::Parser& input)
 {
   for (std::size_t i = 0; i < input["text"].size(); ++ i)
   {
-    const Core::File_IO::Node& itext = input["text"][i];
+    const Core::Parser::Node& itext = input["text"][i];
     std::string id = itext["id"].string();
     capitalize(id); // system id start with uppercase
     set<C::String>(id , "text", itext["value"].string());
@@ -960,7 +960,7 @@ void File_IO::read_init_text_defaults (const Core::File_IO& input)
 
   for (std::string id : Config::possible_actions)
   {
-    const Core::File_IO::Node& idefault = input["default"][id];
+    const Core::Parser::Node& idefault = input["default"][id];
     std::string label = idefault["label"].string();
 
     set<C::String>("Default_" + id , "label", label);
@@ -970,7 +970,7 @@ void File_IO::read_init_text_defaults (const Core::File_IO& input)
       auto action = set<C::Random_conditional>("Default_" + id , "action");
       for (std::size_t j = 0; j < idefault["effect"].size(); ++ j)
       {
-        const Core::File_IO::Node& iaction = idefault["effect"][j];
+        const Core::Parser::Node& iaction = idefault["effect"][j];
         std::string function = iaction.nstring();
 
         auto rnd_action = C::make_handle<C::Action>
@@ -984,7 +984,7 @@ void File_IO::read_init_text_defaults (const Core::File_IO& input)
   set<C::String>("Inventory", "label", input["default"]["inventory"]["label"].string());
 }
 
-void File_IO::read_savefiles (const Core::File_IO& input)
+void File_IO::read_savefiles (const Core::Parser& input)
 {
   int most_recent = -1;
   std::string most_recent_save_id = "";
@@ -992,13 +992,13 @@ void File_IO::read_savefiles (const Core::File_IO& input)
   {
     std::string save_path = "save" + value<C::String>("Save", "suffix", "") +
                             "_" + save_id + ".yaml";
-    Core::File_IO input (save_path, true);
+    Core::Parser input (save_path, true);
     if (!input.parse())
       continue;
 
     std::string room_id = input["room"].string();
     // Get room name (if file not found, save is outdated, just ignore all
-    Core::File_IO room_content ("data/rooms/" + room_id + ".yaml");
+    Core::Parser room_content ("data/rooms/" + room_id + ".yaml");
     if (!room_content.parse())
       break;
 
@@ -1038,7 +1038,7 @@ void File_IO::read_savefiles (const Core::File_IO& input)
 
 void File_IO::read_locale()
 {
-  Core::File_IO input ("data/locale.yaml");
+  Core::Parser input ("data/locale.yaml");
   input.parse();
 
   auto available = set<C::Vector<std::string>>("Game", "available_locales");
@@ -1066,10 +1066,10 @@ void File_IO::read_locale()
     set<C::String>("Locale_" + id , "description", description);
   }
 
-  Core::File_IO::Node lines = input["lines"];
+  Core::Parser::Node lines = input["lines"];
   for (std::size_t i = 0; i < lines.size(); ++ i)
   {
-    Core::File_IO::Node l = lines[i];
+    Core::Parser::Node l = lines[i];
     std::string line = l[base].string();
     for (const auto& m : map)
     {

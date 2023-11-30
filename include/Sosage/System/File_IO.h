@@ -38,7 +38,7 @@
 #include <Sosage/Component/Image.h>
 #include <Sosage/Config/config.h>
 #include <Sosage/Content.h>
-#include <Sosage/Core/File_IO.h>
+#include <Sosage/Core/Parser.h>
 #include <Sosage/System/Base.h>
 
 #include <unordered_set>
@@ -50,7 +50,7 @@ class File_IO : public Base
 {
 private:
 
-  using Function = std::function<void(const std::string&, const Core::File_IO::Node&)>;
+  using Function = std::function<void(const std::string&, const Core::Parser::Node&)>;
   std::unordered_map<std::string, Function> m_dispatcher;
 
 public:
@@ -72,16 +72,16 @@ public:
 
 private:
 
-  void read_init_general (const Core::File_IO& input);
-  void read_init_achievement (const Core::File_IO& input);
-  void read_init_cursor (const Core::File_IO& input);
-  void read_init_inventory (const Core::File_IO& input);
-  void read_init_interface (const Core::File_IO& input);
-  void read_init_functions (const Core::File_IO& input);
-  void read_init_global_items (const Core::File_IO& input);
-  void read_init_text_defaults (const Core::File_IO& input);
+  void read_init_general (const Core::Parser& input);
+  void read_init_achievement (const Core::Parser& input);
+  void read_init_cursor (const Core::Parser& input);
+  void read_init_inventory (const Core::Parser& input);
+  void read_init_interface (const Core::Parser& input);
+  void read_init_functions (const Core::Parser& input);
+  void read_init_global_items (const Core::Parser& input);
+  void read_init_text_defaults (const Core::Parser& input);
 
-  void read_savefiles (const Core::File_IO& input);
+  void read_savefiles (const Core::Parser& input);
 
   void parse_function (const std::vector<std::string>& args,
                        Component::Action_handle action);
@@ -96,23 +96,23 @@ private:
   // Implemented in File_IO__read_room.cpp:
   void read_room (const std::string& file_name);
 
-  void read_action (const std::string& id, const Core::File_IO::Node& input);
-  void read_animation (const std::string& id, const Core::File_IO::Node& input);
-  void read_character (const std::string& id, const Core::File_IO::Node& input);
-  void read_character_skin (const std::string& id, const Core::File_IO::Node& input,
+  void read_action (const std::string& id, const Core::Parser::Node& input);
+  void read_animation (const std::string& id, const Core::Parser::Node& input);
+  void read_character (const std::string& id, const Core::Parser::Node& input);
+  void read_character_skin (const std::string& id, const Core::Parser::Node& input,
                             const std::string& default_state);
-  void read_code (const std::string& id, const Core::File_IO::Node& input);
-  void read_dialog (const std::string& id, const Core::File_IO::Node& input);
-  void read_integer (const std::string& id, const Core::File_IO::Node& input);
-  void read_music (const std::string& id, const Core::File_IO::Node& input);
-  void read_object (const std::string& id, const Core::File_IO::Node& input);
+  void read_code (const std::string& id, const Core::Parser::Node& input);
+  void read_dialog (const std::string& id, const Core::Parser::Node& input);
+  void read_integer (const std::string& id, const Core::Parser::Node& input);
+  void read_music (const std::string& id, const Core::Parser::Node& input);
+  void read_object (const std::string& id, const Core::Parser::Node& input);
   std::pair<Component::Handle, Component::Handle>
   read_object_action (const std::string& id, const std::string& action,
-                      const Core::File_IO::Node& input);
-  void read_scenery (const std::string& id, const Core::File_IO::Node& input);
-  void read_sound (const std::string& id, const Core::File_IO::Node& input);
-  void read_text (const std::string& id, const Core::File_IO::Node& input);
-  void read_window (const std::string& id, const Core::File_IO::Node& input);
+                      const Core::Parser::Node& input);
+  void read_scenery (const std::string& id, const Core::Parser::Node& input);
+  void read_sound (const std::string& id, const Core::Parser::Node& input);
+  void read_text (const std::string& id, const Core::Parser::Node& input);
+  void read_window (const std::string& id, const Core::Parser::Node& input);
 
 };
 

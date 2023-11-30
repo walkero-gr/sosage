@@ -1,6 +1,6 @@
 /*
-  [include/Sosage/Core/File_IO.h]
-  Abstraction file for third party library handling file IO.
+  [include/Sosage/Core/Parser.h]
+  Abstraction file for parser library.
 
   ===========================================================================
 
@@ -30,23 +30,14 @@
   Author(s): Simon Giraudot <sosage@ptilouk.net>
 */
 
-#ifndef SOSAGE_CORE_FILE_IO_H
-#define SOSAGE_CORE_FILE_IO_H
+#ifndef SOSAGE_CORE_PARSER_H
+#define SOSAGE_CORE_PARSER_H
 
-#include <Sosage/Config/platform.h>
-#ifdef SOSAGE_PORT
-#include <Sosage/Third_party/Port.h>
-#else
-#include <Sosage/Third_party/SDL_file.h>
-#endif
+#include <Sosage/Third_party/Yaml.h>
 
 namespace Sosage::Core
 {
-#ifdef SOSAGE_PORT
-namespace File_IO = Core::Port::File_IO;
-#else
-namespace File_IO = Third_party::SDL_file;
-#endif
+using Parser = Third_party::Yaml;
 } // namespace Sosage::Core
 
 #endif

@@ -50,18 +50,18 @@ Package_asset_map Packaged_asset_manager::package_asset_map;
 Packaged_asset::Packaged_asset (const std::string& filename, bool write)
   : m_buffer(nullptr)
 {
-  m_base = IO::open(filename, write);
+  m_base = Core::File_IO::open(filename, write);
 }
 
 Packaged_asset::Packaged_asset (Buffer* buffer)
   : m_buffer(buffer)
 {
-  m_base = IO::open(buffer->data(), buffer->size());
+  m_base = Core::File_IO::open(buffer->data(), buffer->size());
 }
 
 Packaged_asset::Packaged_asset (const void* memory, std::size_t size)
 {
-  m_base = IO::open(memory, size);
+  m_base = Core::File_IO::open(memory, size);
 }
 
 Packaged_asset::Packaged_asset() { }
@@ -73,7 +73,7 @@ Packaged_asset::operator bool() const
 
 void Packaged_asset::close()
 {
-  IO::close(m_base);
+  Core::File_IO::close(m_base);
   m_base.buffer = nullptr;
   if (m_buffer != nullptr)
   {
@@ -99,27 +99,27 @@ std::size_t Packaged_asset::size() const
 
 std::size_t Packaged_asset::read (void* ptr, std::size_t max_num)
 {
-  return IO::read (m_base, ptr, max_num);
+  return Core::File_IO::read (m_base, ptr, max_num);
 }
 
 void Packaged_asset::write (const std::string& str)
 {
-  IO::write (m_base, str.c_str());
+  Core::File_IO::write (m_base, str.c_str());
 }
 
 std::size_t Packaged_asset::tell()
 {
-  return IO::tell(m_base);
+  return Core::File_IO::tell(m_base);
 }
 
 void Packaged_asset::seek (std::size_t pos)
 {
-  IO::seek(m_base, pos);
+  Core::File_IO::seek(m_base, pos);
 }
 
 void Packaged_asset::binary_read (Buffer& b)
 {
-  IO::read (m_base, b.data(), b.size());
+  Core::File_IO::read (m_base, b.data(), b.size());
 }
 
 bool Packaged_asset_manager::init (const std::string& folder, bool scap_mode)
@@ -283,7 +283,7 @@ bool Packaged_asset_manager::init (const std::string& folder, bool scap_mode)
 
 Packaged_asset Packaged_asset_manager::open_pref (const std::string& filename, bool write)
 {
-  return Packaged_asset (IO::pref_path() + filename, write);
+  return Packaged_asset (Core::File_IO::pref_path() + filename, write);
 }
 
 Packaged_asset Packaged_asset_manager::open (const std::string& filename, bool file_is_package)
