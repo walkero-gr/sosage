@@ -1,5 +1,5 @@
 /*
-  [include/Sosage/Utils/Packaged_asset_manager.h]
+  [include/Sosage/Assets/Packaged_asset_manager.h]
   Handle packaged assets.
 
   ===========================================================================
@@ -30,8 +30,8 @@
   Author(s): Simon Giraudot <sosage@ptilouk.net>
 */
 
-#ifndef SOSAGE_UTILS_PACKAGED_ASSET_MANAGER_H
-#define SOSAGE_UTILS_PACKAGED_ASSET_MANAGER_H
+#ifndef SOSAGE_ASSETS_PACKAGED_ASSET_MANAGER_H
+#define SOSAGE_ASSETS_PACKAGED_ASSET_MANAGER_H
 
 #if defined(SOSAGE_PACKAGED) || defined(SOSAGE_SCAP)
 
@@ -125,4 +125,4 @@ private:
 
 #endif // SOSAGE_PACKAGED
 
-#endif // SOSAGE_UTILS_PACKAGED_ASSET_MANAGER_H
+#endif // SOSAGE_ASSETS_PACKAGED_ASSET_MANAGER_H

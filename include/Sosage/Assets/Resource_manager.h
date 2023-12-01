@@ -1,5 +1,5 @@
 /*
-  [include/Sosage/Utils/Resource_manager.h]
+  [include/Sosage/Assets/Resource_manager.h]
   Avoid loading the same file twice.
 
   ===========================================================================
@@ -30,8 +30,8 @@
   Author(s): Simon Giraudot <sosage@ptilouk.net>
 */
 
-#ifndef SOSAGE_UTILS_RESOURCE_MANAGER_H
-#define SOSAGE_UTILS_RESOURCE_MANAGER_H
+#ifndef SOSAGE_ASSETS_RESOURCE_MANAGER_H
+#define SOSAGE_ASSETS_RESOURCE_MANAGER_H
 
 #include <Sosage/Component/Condition.h>
 #include <Sosage/Content.h>
@@ -112,4 +112,4 @@ public:
 
 } // namespace Sosage
 
-#endif // SOSAGE_UTILS_RESOURCE_MANAGER_H
+#endif // SOSAGE_ASSETS_RESOURCE_MANAGER_H

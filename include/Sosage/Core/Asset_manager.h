@@ -34,9 +34,9 @@
 #define SOSAGE_CORE_ASSET_MANAGER_H
 
 #ifdef SOSAGE_PACKAGED
-#include <Sosage/Utils/Packaged_asset_manager.h>
+#include <Sosage/Assets/Packaged_asset_manager.h>
 #else
-#include <Sosage/Utils/Unpackaged_asset_manager.h>
+#include <Sosage/Assets/Unpackaged_asset_manager.h>
 #endif
 
 namespace Sosage

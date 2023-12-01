@@ -33,10 +33,10 @@
 #ifndef SOSAGE_THIRD_PARTY_SDL_H
 #define SOSAGE_THIRD_PARTY_SDL_H
 
+#include <Sosage/Assets/Resource_manager.h>
 #include <Sosage/Utils/binary_io.h>
 #include <Sosage/Utils/Bitmap_2.h>
 #include <Sosage/Utils/color.h>
-#include <Sosage/Utils/Resource_manager.h>
 
 #include <SDL.h>
 #include <SDL_ttf.h>

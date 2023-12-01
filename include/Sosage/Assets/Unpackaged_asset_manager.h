@@ -1,5 +1,5 @@
 /*
-  [include/Sosage/Utils/Unpackaged_asset_manager.h]
+  [include/Sosage/Assets/Unpackaged_asset_manager.h]
   Handle unpackaged assets.
 
   ===========================================================================
@@ -30,8 +30,8 @@
   Author(s): Simon Giraudot <sosage@ptilouk.net>
 */
 
-#ifndef SOSAGE_UTILS_UNPACKAGED_ASSET_MANAGER_H
-#define SOSAGE_UTILS_UNPACKAGED_ASSET_MANAGER_H
+#ifndef SOSAGE_ASSETS_UNPACKAGED_ASSET_MANAGER_H
+#define SOSAGE_ASSETS_UNPACKAGED_ASSET_MANAGER_H
 
 #ifndef SOSAGE_PACKAGED
 
@@ -95,4 +95,4 @@ private:
 
 #endif // not SOSAGE_PACKAGED
 
-#endif // SOSAGE_UTILS_UNPACKAGED_ASSET_MANAGER_H
+#endif // SOSAGE_ASSETS_UNPACKAGED_ASSET_MANAGER_H

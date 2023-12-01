@@ -1,5 +1,5 @@
 /*
-  [src/Sosage/Utils/Packaged_asset_manager.cpp]
+  [src/Sosage/Assets/Packaged_asset_manager.cpp]
   Handle packaged assets.
 
   ===========================================================================
@@ -32,8 +32,8 @@
 
 #if defined(SOSAGE_PACKAGED) || defined(SOSAGE_SCAP)
 
+#include <Sosage/Assets/Packaged_asset_manager.h>
 #include <Sosage/Third_party/LZ4.h>
-#include <Sosage/Utils/Packaged_asset_manager.h>
 #include <Sosage/Utils/conversions.h>
 #include <Sosage/Utils/error.h>
 #include <Sosage/Utils/image_split.h>

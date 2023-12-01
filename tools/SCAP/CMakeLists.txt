@@ -48,13 +48,13 @@ endif()
 
 set(SCAP_SRC
   "src/SCAP/asset_packager.cpp"
+  "../../src/Sosage/Assets/Packaged_asset_manager.cpp"
+  "../../src/Sosage/Assets/Unpackaged_asset_manager.cpp"
   "../../src/Sosage/Component/Base.cpp"
   "../../src/Sosage/Component/Ground_map.cpp"
   "../../src/Sosage/Third_party/LZ4.cpp"
   "../../src/Sosage/Third_party/SDL.cpp"
   "../../src/Sosage/Third_party/SDL_file.cpp"
-  "../../src/Sosage/Utils/Packaged_asset_manager.cpp"
-  "../../src/Sosage/Utils/Unpackaged_asset_manager.cpp"
   "../../src/Sosage/Utils/Bitmap_2.cpp"
   "../../src/Sosage/Utils/binary_io.cpp"
   "../../src/Sosage/Utils/color.cpp"

@@ -1,5 +1,5 @@
 /*
-  [src/Sosage/Utils/Unpackaged_asset_manager.cpp]
+  [src/Sosage/Assets/Unpackaged_asset_manager.cpp]
   Handle unpackaged assets.
 
   ===========================================================================
@@ -32,8 +32,8 @@
 
 #ifndef SOSAGE_PACKAGED
 
+#include <Sosage/Assets/Unpackaged_asset_manager.h>
 #include <Sosage/Third_party/LZ4.h>
-#include <Sosage/Utils/Unpackaged_asset_manager.h>
 #include <Sosage/Utils/conversions.h>
 #include <Sosage/Utils/error.h>
 #include <Sosage/Utils/image_split.h>

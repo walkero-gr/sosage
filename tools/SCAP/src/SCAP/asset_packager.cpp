@@ -30,11 +30,11 @@
   Author(s): Simon Giraudot <sosage@ptilouk.net>
 */
 
+#include <Sosage/Assets/Packaged_asset_manager.h>
+#include <Sosage/Assets/Unpackaged_asset_manager.h>
 #include <Sosage/Component/Ground_map.h>
 #include <Sosage/Third_party/LZ4.h>
 #include <Sosage/Third_party/SDL.h>
-#include <Sosage/Utils/Packaged_asset_manager.h>
-#include <Sosage/Utils/Unpackaged_asset_manager.h>
 #include <Sosage/Utils/conversions.h>
 #include <Sosage/Utils/binary_io.h>
 #include <Sosage/Utils/image_split.h>
