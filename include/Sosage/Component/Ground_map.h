@@ -114,8 +114,12 @@ public:
   Ground_map (const std::string& entity, const std::string& component,
               const std::string& file_name, int front_z, int back_z,
               const std::function<void()>& callback);
+#ifdef SOSAGE_SCAP
   void write (const std::string& filename);
+#endif
+#ifdef SOSAGE_PACKAGED
   void read (const std::string& filename);
+#endif
 
   template <typename Functor>
   void for_each_vertex (const Functor& functor) const

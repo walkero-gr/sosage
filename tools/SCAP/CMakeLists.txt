@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 17)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/../../cmake")
 
 set(SCAP_DEPENDENCIES_OKAY true)
-set(SCAP_INCLUDE_DIRECTORIES "${CMAKE_SOURCE_DIR}/../../include")
+set(SCAP_INCLUDE_DIRECTORIES "${CMAKE_SOURCE_DIR}/include;${CMAKE_SOURCE_DIR}/../../include")
 set(SCAP_LINK_LIBRARIES "")
 set(SCAP_COMPILE_DEFINITIONS "")
 
@@ -47,12 +47,12 @@ else()
 endif()
 
 set(SCAP_SRC
+  "src/SCAP/asset_packager.cpp"
   "../../src/Sosage/Component/Base.cpp"
   "../../src/Sosage/Component/Ground_map.cpp"
   "../../src/Sosage/Third_party/LZ4.cpp"
   "../../src/Sosage/Third_party/SDL.cpp"
   "../../src/Sosage/Third_party/SDL_file.cpp"
-  "../../src/Sosage/Utils/asset_packager.cpp"
   "../../src/Sosage/Utils/Packaged_asset_manager.cpp"
   "../../src/Sosage/Utils/Unpackaged_asset_manager.cpp"
   "../../src/Sosage/Utils/Bitmap_2.cpp"

@@ -1,5 +1,5 @@
 /*
-  [include/Sosage/Utils/asset_packager.h]
+  [SCAP/asset_packager.h]
   Package (and depackage) assets.
 
   ===========================================================================
@@ -30,14 +30,14 @@
   Author(s): Simon Giraudot <sosage@ptilouk.net>
 */
 
-#ifndef SOSAGE_UTILS_ASSET_PACKAGER_H
-#define SOSAGE_UTILS_ASSET_PACKAGER_H
+#ifndef SCAP_ASSET_PACKAGER_H
+#define SCAP_ASSET_PACKAGER_H
 
 #include <Sosage/Core/Asset_manager.h>
 
 #include <memory>
 
-namespace Sosage::SCAP
+namespace SCAP
 {
 
 constexpr unsigned int surface_format = SDL_PIXELFORMAT_ARGB8888;
@@ -54,6 +54,6 @@ void write_image (std::ofstream& ofile, const std::string& filename, bool is_obj
 void compile_package (const std::string& input_folder, const std::string& output_folder);
 void decompile_package (const std::string& filename, std::string folder);
 
-} // namespace Sosage::SCAP
+} // namespace SCAP
 
-#endif // SOSAGE_UTILS_ASSET_PACKAGER_H
+#endif // SCAP_ASSET_PACKAGER_H

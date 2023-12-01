@@ -40,7 +40,10 @@
 namespace Sosage
 {
 
+#ifdef SOSAGE_SCAP
 Buffer lz4_compress_buffer (void* data, std::size_t size);
+#endif
+
 void lz4_decompress_buffer (void* data, std::size_t size, void* out, std::size_t output_size);
 
 }

@@ -277,6 +277,7 @@ void Ground_map::build_graph (const std::function<void()>& callback)
   debug << "Edges = " << m_graph.num_edges() << std::endl;
 }
 
+#ifdef SOSAGE_SCAP
 void Ground_map::write (const std::string& filename)
 {
   std::ofstream ofile (filename, std::ios::binary);
@@ -304,7 +305,9 @@ void Ground_map::write (const std::string& filename)
     binary_write (ofile, b);
   }
 }
+#endif
 
+#ifdef SOSAGE_PACKAGED
 void Ground_map::read (const std::string& filename)
 {
   Asset asset = Asset_manager::open(filename);
@@ -328,6 +331,7 @@ void Ground_map::read (const std::string& filename)
   }
   asset.close();
 }
+#endif
 
 void Ground_map::find_path (Point origin,
                             Point target,

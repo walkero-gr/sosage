@@ -1,4 +1,4 @@
-#include <Sosage/Utils/asset_packager.h>
+#include <SCAP/asset_packager.h>
 
 int main (int argc, char** argv)
 {
@@ -12,9 +12,9 @@ int main (int argc, char** argv)
   std::string root = argv[1];
   std::string out = argv[2];
   if (argc == 4)
-    Sosage::SCAP::decompile_package (root, out);
+    SCAP::decompile_package (root, out);
   else
-    Sosage::SCAP::compile_package (root, out);
+    SCAP::compile_package (root, out);
 
   return EXIT_SUCCESS;
 }

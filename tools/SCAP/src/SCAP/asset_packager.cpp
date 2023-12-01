@@ -1,5 +1,5 @@
 /*
-  [src/Sosage/Utils/asset_packager.cpp]
+  [SCAP/asset_packager.cpp]
   Package (and depackage) assets.
 
   ===========================================================================
@@ -30,17 +30,16 @@
   Author(s): Simon Giraudot <sosage@ptilouk.net>
 */
 
-#ifdef SOSAGE_SCAP
-
 #include <Sosage/Component/Ground_map.h>
 #include <Sosage/Third_party/LZ4.h>
 #include <Sosage/Third_party/SDL.h>
 #include <Sosage/Utils/Packaged_asset_manager.h>
 #include <Sosage/Utils/Unpackaged_asset_manager.h>
-#include <Sosage/Utils/asset_packager.h>
 #include <Sosage/Utils/conversions.h>
 #include <Sosage/Utils/binary_io.h>
 #include <Sosage/Utils/image_split.h>
+
+#include <SCAP/asset_packager.h>
 
 #include <SDL_image.h>
 
@@ -50,8 +49,9 @@
 
 #include <tbb/parallel_for_each.h>
 
-namespace Sosage::SCAP
+namespace SCAP
 {
+using namespace Sosage;
 
 std::size_t package_size_before = 0;
 std::size_t package_size_after = 0;
@@ -420,6 +420,4 @@ void decompile_package (const std::string& ifolder, std::string folder)
   }
 }
 
-} // namespace Sosage::SCAP
-
-#endif
+} // namespace SCAP
