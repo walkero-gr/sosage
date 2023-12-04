@@ -779,8 +779,8 @@ void Logic::follow (const std::string& follower)
   if (dx > reach_x + reach_hysteresis ||
       dy > reach_y + reach_hysteresis)
   {
-    std::cerr << reach_x << " " << reach_y << " " << reach_hysteresis << std::endl;
-    std::cerr << dx << " " << dy << std::endl;
+    debug << reach_x << " " << reach_y << " " << reach_hysteresis << std::endl;
+    debug << dx << " " << dy << std::endl;
     debug << follower << " FOLLOWS " << player << std::endl;
     compute_path_from_target (pos_player, follower);
   }

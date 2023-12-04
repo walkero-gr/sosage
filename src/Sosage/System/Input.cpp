@@ -283,13 +283,13 @@ void Input::handle_exit_pause_speed (const Event& ev)
       && status()->is(PAUSED))
   {
     status()->pop();
-    std::cerr << "RESUME" << std::endl;
+    debug << "RESUME" << std::endl;
   }
   if (ev == Event(WINDOW, BACKGROUND)
       && !status()->is (PAUSED))
   {
     status()->push(PAUSED);
-    std::cerr << "PAUSE" << std::endl;
+    debug << "PAUSE" << std::endl;
   }
 
 #ifdef SOSAGE_DEV

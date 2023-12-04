@@ -48,11 +48,7 @@ Debug::Debug (const std::string& entity, const std::string& component, Content& 
 
 Debug::~Debug()
 {
-#ifdef SOSAGE_DEBUG
   debug << "Mean CPU usage = " << int(std::round(100. * (m_mean_cpu / m_mean_nb))) << "%" << std::endl;
-#else
-  std::cerr << "Mean CPU usage = " << int(std::round(100. * (m_mean_cpu / m_mean_nb))) << "%" << std::endl;
-#endif
 }
 
 std::string Debug::debug_str()
