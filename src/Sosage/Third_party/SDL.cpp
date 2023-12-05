@@ -665,8 +665,33 @@ SDL::Image SDL::create_text (const SDL::Font& font, const std::string& color_str
     int height = surf->h;
 
 #ifndef SOSAGE_GUILESS
+
+    int nb_x = 1;
+    int nb_y = 1;
+    if (int(height) > m_max_texture_height || int(width) > m_max_texture_width)
+    {
+      nb_x = Splitter::nb_sub (width);
+      nb_y = Splitter::nb_sub (height);
+      debug << "Splitting overly large surface in " << nb_x << "x" << nb_y << std::endl;
+      std::vector<SDL_Surface*> surfaces = Splitter::split_image (surf);
+      std::vector<SDL_Texture*> textures, highlights;
+      textures.reserve(nb_x * nb_y);
+      highlights.reserve(nb_x * nb_y);
+      for (std::size_t i = 0; i < surfaces.size(); ++ i)
+      {
+        SDL_Texture* texture
+          = SDL_CreateTextureFromSurface(m_renderer, surfaces[i]);
+        check (texture != nullptr, "Cannot create texture, " + std::string(SDL_GetError()));
+        textures.push_back(texture);
+        highlights.push_back(nullptr);
+        SDL_FreeSurface(surfaces[i]);
+      }
+      SDL_FreeSurface (surf);
+      return make_images (textures, highlights, width, height);
+    }
+
     SDL_Texture* out = SDL_CreateTextureFromSurface(m_renderer, surf);
-    check (out != nullptr, "Cannot create texture from text \"" + text + "\"");
+    check (out != nullptr, "Cannot create texture from text \"" + text + "\", " + SDL_GetError());
 #else
     SDL_Texture* out = nullptr;
 #endif
@@ -698,6 +723,32 @@ SDL::Image SDL::create_outlined_text (const SDL::Font& font, const std::string& 
        int height = back->h;
 
 #ifndef SOSAGE_GUILESS
+       int nb_x = 1;
+       int nb_y = 1;
+       debug << width << " " << height << " " << m_max_texture_width << " " << m_max_texture_height << std::endl;
+       if (int(height) > m_max_texture_height || int(width) > m_max_texture_width)
+       {
+         nb_x = Splitter::nb_sub (width);
+         nb_y = Splitter::nb_sub (height);
+         debug << "Splitting overly large surface in " << nb_x << "x" << nb_y << std::endl;
+         std::vector<SDL_Surface*> surfaces = Splitter::split_image (back);
+         std::vector<SDL_Texture*> textures, highlights;
+         textures.reserve(nb_x * nb_y);
+         highlights.reserve(nb_x * nb_y);
+         for (std::size_t i = 0; i < surfaces.size(); ++ i)
+         {
+           SDL_Texture* texture
+             = SDL_CreateTextureFromSurface(m_renderer, surfaces[i]);
+           check (texture != nullptr, "Cannot create texture, " + std::string(SDL_GetError()));
+           textures.push_back(texture);
+           highlights.push_back(nullptr);
+           SDL_FreeSurface(surfaces[i]);
+         }
+         SDL_FreeSurface (surf);
+         return make_images (textures, highlights, width, height);
+       }
+
+
        SDL_Texture* out = SDL_CreateTextureFromSurface(m_renderer, back);
        check (out != nullptr, "Cannot create texture from text \"" + text + "\"");
 #else
