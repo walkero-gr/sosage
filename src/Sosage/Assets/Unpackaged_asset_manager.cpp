@@ -59,6 +59,7 @@ Unpackaged_asset::operator bool() const
 void Unpackaged_asset::close()
 {
   Core::File_IO::close(m_base);
+  m_base.buffer = nullptr;
 }
 
 SDL_RWops* Unpackaged_asset::base()
