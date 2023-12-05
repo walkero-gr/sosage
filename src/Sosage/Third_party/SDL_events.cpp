@@ -142,8 +142,7 @@ void SDL_events::rumble_gamepad (Gamepad_ptr ptr, double intensity, double durat
 {
   Uint16 intens = Uint16(intensity * 0xFFFF);
   Uint32 durat = Uint32(1000. * duration);
-  if (SDL_GameControllerHasRumble(ptr))
-    SDL_GameControllerRumble (ptr, intens, intens, durat);
+  SDL_GameControllerRumble (ptr, intens, intens, durat);
 }
 
 Gamepad_info SDL_events::gamepad_info (Gamepad_ptr ptr) const
