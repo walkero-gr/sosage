@@ -292,6 +292,7 @@ function(Sosage_generate_android_tree Is_apk)
     set(SOSAGE_ANDROID_ASSETPACK "assetPacks = [\":gamedata\"]")
   endif()
   
+  set(CMAKE_ANDROID_FLAGS "${CMAKE_CXX_FLAGS}")
   if (SOSAGE_CFG_USE_SDL_MIXER_EXT)
     set(SDL2_MIXER_ANDROID_MK "${CMAKE_BINARY_DIR}/${SOSAGE_ANDROID_ROOT}/app/jni/SDL_mixer_ext/Android.mk")
     set(CMAKE_ANDROID_FLAGS "${CMAKE_ANDROID_FLAGS} -DSOSAGE_LINKED_WITH_SDL_MIXER_EXT")

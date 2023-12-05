@@ -309,6 +309,7 @@ void Menu::make_exit_menu_item (Component::Menu::Node node, const std::string& i
   node[0][0].init(icon, pos_icon);
   node[0][1].init(img, pos);
 
+
   // Create button
   auto button = request<C::Image>(id + "_button", "image");
   C::Position_handle pos_button;

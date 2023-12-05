@@ -135,6 +135,48 @@ private:
   std::pair<Component::Image_handle, Component::Position_handle>
   make_settings_subtitle (const std::string& id, const std::string& suffix, int y,
                           const std::string& text);
+
+  // SUPPORT SECTION
+  //
+  // Note: if you're planning on sharing the version you are compiling, I'm
+  // asking you to please *not* remove the support message.
+  //
+  // Of course, you are allowed to do it by the free license, and if you do,
+  // I won't come at you legally. I'm just asking you to be a kind person
+  // and to leave this support message as is.
+  //
+  // It's minimally invasive: it does not pop up unexpectedly, it does not
+  // change the game, it does not prevent players from enjoying it, it is
+  // simply here on the main menu, and it's not made so that you can click
+  // on it by mistake. Please be kind and leave it. Thanks :)
+#if defined(SOSAGE_NO_SUPPORT_MESSAGE) \
+  && defined(YES_I_M_ABSOLUTELY_SURE_I_DONT_WANT_TO_SHOW_SUPPORT)
+  std::size_t exit_menu_size() const { return Config::exit_menu_items.size() + 2; }
+  void make_support_item (Component::Menu::Node) { }
+#else
+  std::size_t exit_menu_size()
+  {
+    return Config::exit_menu_items.size() + 3;
+  }
+  void make_support_item (Component::Menu::Node node)
+  {
+    auto font = get<Component::Font>("Interface", "font");
+    auto text = request<Component::String>("Support", "text");
+    node.split(BUTTON, 1);
+
+    auto img = get<Component::Image>("Support_text", "image");
+    auto pos = get_or_set<Component::Absolute_position>
+          ("Support_text", "position", Point(335, 90));
+    node[0].init(img, pos);
+
+    auto button = get<Component::Image>("Support_button", "image");
+    auto pos_button = set<Component::Relative_position>
+                      ("Support_button", "position", pos, Vector(0,0));
+    node.init(button, pos_button);
+
+    set<Component::String>("Support", "effect", "Support");
+  }
+#endif
 };
 
 } // namespace System

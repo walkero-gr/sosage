@@ -17,10 +17,13 @@ History of versions and modifications of the SOSAGE engine.
 ### Interface and menus
 
 - Better distribution of items when some are ignored (Android, port)
+- Add support for button for free licensed sharing
 
 ### Bug fixes
 
 - Crash when disconnecting gamepads connected during pause
+- Text images were not split and could overflow max texture size on
+  small configurations (Raspberry Pi)
 
 ### Game Engine
 

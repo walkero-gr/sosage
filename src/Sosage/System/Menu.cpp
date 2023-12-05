@@ -74,6 +74,11 @@ Menu::Menu(Content& content)
     set<C::String>("Savegame", "id", "auto");
   });
 
+  create_callback ("Exit", "Support", [&](const std::string&, const std::string&)
+  {
+    emit ("Game", "support");
+  });
+
   for (const std::string& menu : { "Exit", "Message", "Saved"})
     create_callback (menu, "Ok", [&](const std::string& m, const std::string&)
     {
@@ -315,7 +320,7 @@ void Menu::init()
 {
   auto exit_menu = set<C::Menu>("Exit", "menu");
 
-  exit_menu->split(VERTICALLY, Config::exit_menu_items.size() + 2);
+  exit_menu->split(VERTICALLY, exit_menu_size());
 
   set<C::Relative_position>("Menu", "reference", get<C::Position>("Menu_background", "position"), Vector(-240, -420));
   make_exit_menu_item ((*exit_menu)[0], "Menu_logo", Config::exit_menu_logo);
@@ -330,6 +335,8 @@ void Menu::init()
   }
 
   make_oknotok_item ((*exit_menu)[idx], true);
+
+  make_support_item((*exit_menu)[idx+1]);
 
   auto wanna_restart = set<C::Menu>("New_game", "menu");
   wanna_restart->split(VERTICALLY, 3);

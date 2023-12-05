@@ -51,7 +51,7 @@ if v_data == '' or v_major == '' or v_minor == '' or v_patch == '':
 #version = v_major + '.' + v_minor + '.' + v_patch + '-d' + v_data + '-' + v_variant
 version = v_major + '.' + v_minor + '.' + v_patch + '-d' + v_data
 print(version)
-    
+
 id = gamename + '-v' + version
 print("## BUILDING " + id + "\n")
 
@@ -62,7 +62,7 @@ if not data["use_compressed_data"]:
         print("Error: uncoherent use_compressed / compress")
         exit()
     data_folder = data["folder"]
-    
+
 data_dir = data["buildfolder"] + "/data"
 scap_buildir = data["buildfolder"] + "/scap"
 linux_buildir = data["buildfolder"] + "/linux"
@@ -79,6 +79,9 @@ dataname = gamename + "-d" + v_data
 configure_only = data["configure_only"]
 
 cmake_cmd = "cmake -DCMAKE_BUILD_TYPE=" + data["build"]
+if "additional_flags" in data:
+    cmake_cmd += ' -DCMAKE_CXX_FLAGS="' + data["additional_flags"] + '"'
+
 cmake_cmd += " -DSOSAGE_BUILD_TYPE=" + data["buildtype"]
 cmake_cmd += " -DSOSAGE_CFG_DISPLAY_DEBUG_INFO:BOOL=" + str(data["debug"])
 cmake_cmd += " -DSOSAGE_DATA_FOLDER=" + data_folder
@@ -120,7 +123,7 @@ def chdir(folder):
 def configure(ifile, ofile):
     open(ofile, 'w').write(open(ifile, 'r').read().replace('${SOSAGE_EXE_NAME}', gamename))
     run_cmd("chmod +x " + ofile)
-        
+
 all_begin = time.perf_counter()
 
 print("### INIT")
@@ -186,8 +189,8 @@ if data["linux"]:
         configure(cwd + '/platform/linux/install.sh', 'install/Install-' + gamename + '.sh')
         configure(cwd + '/platform/linux/uninstall.sh', 'install/Uninstall-' + gamename + '.sh')
         run_cmd("cp -r " + data_folder + "/resources/LICENSE.md install/")
- 
-        cfg_cmd = cmake_cmd + ' -DYAML_INCLUDE_DIR=' + data["libyaml_source_path"] + '/include/'
+
+        cfg_cmd = cmake_cmd.replace('"','\\"') + ' -DYAML_INCLUDE_DIR=' + data["libyaml_source_path"] + '/include/'
         cfg_cmd += ' -DSDL2_MIXER_EXT_INCLUDE_DIR:PATH=' + data["sdl2_mixer_ext_source_path"] + '/include/SDL_mixer_ext'
         cfg_cmd += ' -DSDL2_MIXER_EXT_LIBRARY:FILEPATH=' + data["sdl2_mixer_ext_source_path"] + '/build_bullseye/lib/libSDL2_mixer_ext.a'
         cfg_cmd += ' -DLZ4_INCLUDE_DIR=' + data["lz4_source_path"] + '/lib/ ' + cwd
@@ -214,7 +217,7 @@ if data["steam_linux"]:
         chdir(steam_linux_buildir)
         run_cmd("mkdir -p install")
         # Use static SDL2 mixer ext for simplicity
-        cfg_cmd = cmake_cmd + ' -DYAML_INCLUDE_DIR=' + data["libyaml_source_path"] + '/include/'
+        cfg_cmd = cmake_cmd.replace('"','\\"') + ' -DYAML_INCLUDE_DIR=' + data["libyaml_source_path"] + '/include/'
         cfg_cmd += ' -DSDL2_MIXER_EXT_INCLUDE_DIR:PATH=' + data["sdl2_mixer_ext_source_path"] + '/include/SDL_mixer_ext'
         cfg_cmd += ' -DSDL2_MIXER_EXT_LIBRARY:FILEPATH=' + data["sdl2_mixer_ext_source_path"] + '/build_steam/lib/libSDL2_mixer_ext.a'
         cfg_cmd += ' -DLZ4_INCLUDE_DIR=' + data["lz4_source_path"] + '/lib/'

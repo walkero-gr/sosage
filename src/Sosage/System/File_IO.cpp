@@ -620,7 +620,6 @@ void File_IO::read_init ()
   read_init_achievement (input);
   read_init_cursor (input);
   read_init_inventory (input);
-  read_init_interface (input);
   read_init_functions (input);
   read_init_global_items (input);
   read_init_text_defaults (input);
@@ -631,6 +630,7 @@ void File_IO::read_init ()
   read_savefiles (input);
 
   read_locale();
+  read_init_interface (input);
 }
 
 void File_IO::read_init_general (const Core::Parser& input)
@@ -902,6 +902,28 @@ void File_IO::read_init_interface (const Core::Parser& input)
   auto menu_settings_button = set<C::Image>("Menu_settings_button", "image", menu_settings_button_id, 1, BOX);
   menu_settings_button->set_relative_origin(0.5, 0.5);
   menu_settings_button->on() = false;
+
+  std::string support_off_id = input["menu_support"][0].string("images", "interface", "png");
+  load_locale_dependent_image ("Support_text", "image", support_off_id,
+                               [&](const std::string& skin) -> C::Image_handle
+  {
+    auto img = C::make_handle<C::Image>("Support_text", "image", skin,
+                                        Config::menu_text_depth, UNCLICKABLE);
+    img->set_relative_origin(0.5, 0.5);
+    img->on() = false;
+    return img;
+  });
+
+  std::string support_on_id = input["menu_support"][1].string("images", "interface", "png");
+  load_locale_dependent_image ("Support_button", "image", support_on_id,
+                               [&](const std::string& skin) -> C::Image_handle
+  {
+    auto img = C::make_handle<C::Image>("Support_button", "image", skin,
+                                        Config::menu_button_depth, BOX);
+    img->set_relative_origin(0.5, 0.5);
+    img->on() = false;
+    return img;
+  });
 }
 
 void File_IO::read_init_functions (const Core::Parser& input)

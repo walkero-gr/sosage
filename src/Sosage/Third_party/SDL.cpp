@@ -973,6 +973,11 @@ void SDL::toggle_cursor (bool visible)
   SDL_ShowCursor(visible ? SDL_ENABLE : SDL_DISABLE);
 }
 
+void SDL::browse (const std::string& url)
+{
+  SDL_OpenURL(url.c_str());
+}
+
 void SDL::begin()
 {
 #ifndef SOSAGE_GUILESS

@@ -91,6 +91,8 @@ void Graphic::run()
     m_core.update_view ();
   if (receive ("Window", "toggle_fullscreen"))
     m_core.toggle_fullscreen (value<C::Boolean>("Window", "fullscreen"));
+  if (receive ("Game", "support"))
+    m_core.browse (locale_get("Support_url", "text"));
 
   Point camera = value<C::Absolute_position>(CAMERA__POSITION);
   double current_zoom = value<C::Double>(CAMERA__ZOOM);
