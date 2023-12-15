@@ -336,7 +336,7 @@ void Menu::init()
 
   make_oknotok_item ((*exit_menu)[idx], true);
 
-  make_support_item((*exit_menu)[idx+1]);
+  make_support_item(exit_menu, idx+1);
 
   auto wanna_restart = set<C::Menu>("New_game", "menu");
   wanna_restart->split(VERTICALLY, 3);

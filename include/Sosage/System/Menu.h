@@ -57,7 +57,7 @@ constexpr_auto settings_menu_items
 #if !defined (SOSAGE_ANDROID) && !defined(SOSAGE_EMSCRIPTEN) && !defined(SOSAGE_PORT)
     "Fullscreen",
 #endif
-    "Interface_scale", "Text_speed", "Music_volume", "Sound_volume" 
+    "Interface_scale", "Text_speed", "Music_volume", "Sound_volume"
   };
 constexpr_auto menus
 = {  "Exit", "Phone", "Settings", "Controls"
@@ -152,14 +152,15 @@ private:
 #if defined(SOSAGE_NO_SUPPORT_MESSAGE) \
   && defined(YES_I_M_ABSOLUTELY_SURE_I_DONT_WANT_TO_SHOW_SUPPORT)
   std::size_t exit_menu_size() const { return Config::exit_menu_items.size() + 2; }
-  void make_support_item (Component::Menu::Node) { }
+  void make_support_item (Component::Menu_handle, std::size_t) { }
 #else
   std::size_t exit_menu_size()
   {
     return Config::exit_menu_items.size() + 3;
   }
-  void make_support_item (Component::Menu::Node node)
+  void make_support_item (Component::Menu_handle menu, std::size_t idx)
   {
+    Component::Menu::Node node = (*menu)[idx];
     auto font = get<Component::Font>("Interface", "font");
     auto text = request<Component::String>("Support", "text");
     node.split(BUTTON, 1);
