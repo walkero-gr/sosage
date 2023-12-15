@@ -912,7 +912,8 @@ void SDL::init (int& window_width, int& window_height, bool fullscreen)
 #endif
 
   Asset db = Asset_manager::open ("data/gamecontrollerdb.txt");
-  SDL_GameControllerAddMappingsFromRW (db.base(), 1);
+  SDL_GameControllerAddMappingsFromRW (db.base(), 0);
+  db.close();
 }
 
 SDL::~SDL ()
