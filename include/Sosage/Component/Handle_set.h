@@ -45,7 +45,7 @@ struct Id_hash
 {
   std::size_t operator() (const Id& id) const
   {
-    return std::hash<std::string>()(id.first) ^ std::hash<std::string>()(id.second);
+    return id.hash;
   }
 };
 

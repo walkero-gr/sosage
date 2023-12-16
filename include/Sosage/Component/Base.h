@@ -35,6 +35,7 @@
 
 #include <memory>
 #include <string>
+#include <iostream>
 
 #define STR_NAME(x) virtual std::string str_name() const { return x; }
 #define STR_VALUE(x) virtual std::string str_value() const { return x; }
@@ -43,7 +44,23 @@
 namespace Sosage::Component
 {
 
-using Id = std::pair<std::string, std::string>;
+struct Id
+{
+  std::string first;
+  std::string second;
+  std::size_t hash;
+
+  Id (const std::string& first = "", const std::string& second = "")
+    : first(first), second(second)
+  {
+    hash = std::hash<std::string>()(first) ^ std::hash<std::string>()(second);
+  }
+
+  bool operator== (const Id& other) const
+  {
+    return (first == other.first && second == other.second);
+  }
+};
 
 class Base
 {
