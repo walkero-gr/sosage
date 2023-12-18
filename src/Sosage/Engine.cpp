@@ -210,6 +210,7 @@ bool Engine::run (const std::string& folder_name)
 
 bool Engine::run()
 {
+  SOSAGE_COUNT(Engine_loop_iterations);
   for (System::Handle system : m_systems)
     system->run();
   Steam::run();

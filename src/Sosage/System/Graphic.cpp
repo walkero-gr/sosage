@@ -295,10 +295,11 @@ void Graphic::run()
   to_display.clear();
 
   get<C::Debug>(GAME__DEBUG)->end_loop();
-  m_core.end();
-  get<C::Debug>(GAME__DEBUG)->start_loop();
-
   SOSAGE_TIMER_STOP(System_Graphic__run);
+  SOSAGE_TIMER_START(SDL_Render_and_sleep);
+  m_core.end();
+  SOSAGE_TIMER_STOP(SDL_Render_and_sleep);
+  get<C::Debug>(GAME__DEBUG)->start_loop();
 }
 
 void Graphic::run_loading()

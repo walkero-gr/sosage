@@ -50,8 +50,13 @@ Timer::~Timer()
 {
   if (m_master)
   {
-    debug << "[Profiling " << m_id << "] " << std::endl;
+#ifdef SOSAGE_PROFILE
+    debug << "[Profiling " << m_id << "] ";
+#ifdef SOSAGE_PROFILE_FINELY
+    debug <<  << std::endl;
+#endif
     display();
+#endif
   }
 }
 
@@ -117,9 +122,9 @@ void Timer::display()
       << ", total = " << to_string(total)
       << ", mean = " << to_string(total / m_duration.size()) << std::endl;
 #else
-  debug << m_duration
+  debug << to_string(mean_duration())
         << ((m_nb > 1)
-            ? " (" + to_string(mean_duration()) + " per iteration, " + std::to_string(m_nb) + " iterations)"
+            ? " per iteration (total = " + to_string(m_duration) + " for " + std::to_string(m_nb) + " iterations)"
            : "") << std::endl;
 #endif
 }

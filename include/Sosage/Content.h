@@ -55,6 +55,7 @@ private:
   std::array<Component::Handle, NUMBER_OF_KEYS> m_fast_access_components;
   std::unordered_map<std::string, std::size_t> m_map_component;
 
+
 public:
 
   Content ();
@@ -72,6 +73,7 @@ public:
   template <typename T>
   void set (const std::shared_ptr<T>& t)
   {
+    profile(t->entity() + ":" + t->component(), 0);
     count_set_ptr();
     Component::Handle_map& hmap = handle_map(t->component());
     hmap.insert_or_assign (t->id(), t);
@@ -98,7 +100,7 @@ public:
   template <typename T>
   std::shared_ptr<T> request (const std::string& entity, const std::string& component)
   {
-    count_access(entity, component);
+    profile(entity + ":" + component, 1);
     count_request();
     Component::Handle_map& hmap = handle_map(component);
     Component::Handle_map::iterator iter = hmap.find(Component::Id(entity, component));
@@ -168,13 +170,9 @@ private:
   void count_get();
 
 #ifdef SOSAGE_PROFILE
-  std::unordered_map<std::string, std::size_t> m_access_count;
-  void count_access (const std::string& entity, const std::string& component);
-  void display_access();
-#else
-  void count_access (const std::string&, const std::string&);
-  void display_access ();
+  std::unordered_map<std::string, std::array<std::size_t, 3>> m_profile;
 #endif
+  void profile (const std::string& str, std::size_t idx);
 };
 
 } // namespace Sosage

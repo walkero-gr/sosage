@@ -83,7 +83,14 @@ Content::Content()
 
 Content::~Content()
 {
-  display_access();
+#if defined(SOSAGE_PROFILE) && defined(SOSAGE_PROFILE_TO_FILE)
+  std::ofstream ofile ("content_stats.csv");
+  ofile << "Component,Creations,Access,Deletion,Total" << std::endl;
+  for (const auto& elem : m_profile)
+    ofile << elem.first << "," << elem.second[0] << ","
+          << elem.second[1] << "," << elem.second[2] << ","
+          << elem.second[0] + elem.second[1] + elem.second[2] << std::endl;
+#endif
 }
 
 void Content::clear()
@@ -128,6 +135,7 @@ Component::Handle_set Content::components (const std::string& s)
 
 bool Content::remove (const std::string& entity, const std::string& component, bool optional)
 {
+  profile(entity + ":" + component, 2);
   Component::Handle_map& hmap = handle_map(component);
   Component::Handle_map::iterator iter = hmap.find(Component::Id(entity, component));
   if (optional && iter == hmap.end())
@@ -150,7 +158,7 @@ void Content::emit (const std::string& entity, const std::string& component)
 
 bool Content::receive (const std::string& entity, const std::string& component)
 {
-  count_access(entity, component);
+  profile(entity + ":" + component, 2);
   count_request();
 
   Component::Handle_map& hmap = handle_map(component);
@@ -205,31 +213,10 @@ void Content::count_get()
 
 #ifdef SOSAGE_PROFILE
 
-void Content::count_access (const std::string& entity, const std::string& component)
+void Content::profile (const std::string& str, std::size_t idx)
 {
-  auto inserted = m_access_count.insert (std::make_pair (entity + ":" + component, 1));
-  if (!inserted.second)
-    inserted.first->second ++;
-}
-
-void Content::display_access()
-{
-  std::vector<std::pair<std::string, std::size_t> > sorted;
-  sorted.reserve (m_access_count.size());
-  std::copy (m_access_count.begin(), m_access_count.end(),
-             std::back_inserter (sorted));
-  auto end = std::partition
-             (sorted.begin(), sorted.end(),
-              [](const auto& p) -> bool { return isupper(p.first[0]); });
-  std::sort (sorted.begin(), end,
-             [](const auto& a, const auto& b) -> bool
-             {
-               return a.second > b.second;
-             });
-  debug << "[Profiling system component access count (25 first)]" << std::endl;
-  for (std::size_t i = 0; i < 25; ++ i)
-    debug << " * " << sorted[i].first << " (accessed "
-          << sorted[i].second << " times)" << std::endl;
+  auto inserted = m_profile.insert (std::make_pair (str, std::array<std::size_t,3>{0,0,0}));
+  inserted.first->second[idx] ++;
 }
 
 #else
