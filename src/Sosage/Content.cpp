@@ -221,8 +221,7 @@ void Content::profile (const std::string& str, std::size_t idx)
 
 #else
 
-void Content::count_access (const std::string&, const std::string&) { }
-void Content::display_access () { }
+void Content::profile (const std::string&, std::size_t) { }
 
 #endif
 
