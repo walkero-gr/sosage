@@ -696,9 +696,6 @@ void Control::menu_touchscreen()
 
 bool Control::collides (C::Position_handle cursor, C::Image_handle img)
 {
-  if (!img->on() || img->collision() == UNCLICKABLE)
-    return false;
-
   auto position = get<C::Position>(img->entity() , "position");
   Point p = position->value();
 
@@ -708,14 +705,19 @@ bool Control::collides (C::Position_handle cursor, C::Image_handle img)
 
   Point screen_position = p - img->scale() * Vector(img->origin());
   int xmin = screen_position.X();
-  int ymin = screen_position.Y();
-  int xmax = xmin + int(img->scale() * (img->xmax() - img->xmin()));
-  int ymax = ymin + int(img->scale() * (img->ymax() - img->ymin()));
+  if (cursor->value().X() < xmin)
+    return false;
 
-  if (cursor->value().X() < xmin ||
-      cursor->value().X() >= xmax ||
-      cursor->value().Y() < ymin ||
-      cursor->value().Y() >= ymax)
+  int ymin = screen_position.Y();
+  if (cursor->value().Y() < ymin)
+    return false;
+
+  int xmax = xmin + int(img->scale() * (img->xmax() - img->xmin()));
+  if (cursor->value().X() >= xmax)
+    return false;
+
+  int ymax = ymin + int(img->scale() * (img->ymax() - img->ymin()));
+  if (cursor->value().Y() >= ymax)
     return false;
 
   if (img->collision() == PIXEL_PERFECT)
@@ -740,7 +742,9 @@ std::string Control::first_collision
     {
       if (out && img->z() < out->z())
         continue;
-      if (filter(img) & collides(cursor, img))
+      if (!img->on() || img->collision() == UNCLICKABLE)
+        continue;
+      if (collides(cursor, img) && filter(img))
           out = img;
     }
   SOSAGE_TIMER_STOP(System_Control__Collision_test);
