@@ -2,7 +2,7 @@
 
 History of versions and modifications of the SOSAGE engine.
 
-## `v1.6.0 (mit)` - TBD
+## `v1.6.0 (mit)` - 2023-12-20
 
 ### Release Management
 
@@ -13,6 +13,7 @@ History of versions and modifications of the SOSAGE engine.
 - Game now depends on SDL2 Image *or* LZ4 (depending on packaged
   status)
 - SCAP is moved to its own cmake project
+- Build 32 and 64 bits Gnunux versions
 
 ### Interface and menus
 

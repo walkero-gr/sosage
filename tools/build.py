@@ -5,12 +5,28 @@ import time
 import yaml
 import re
 
-if len(sys.argv) != 2:
+if len(sys.argv) < 2:
     print("Usage: " + sys.argv[0] + "[build.yaml]")
 
 yaml_file = open(sys.argv[1], 'r')
 cwd = os.getcwd()
 data = yaml.safe_load(yaml_file)
+
+if len(sys.argv) > 2:
+    platforms = { "compress_data", "data", "linux", "mac", "win",
+                  "steam_linux", "steam_mac", "steam_win",
+                  "androidapk", "androidaab" }
+    for key in sys.argv[2:]:
+        if key not in platforms:
+            print("ERROR: unknown platform " + key)
+            exit()
+            
+    print("NOTE: ignoring config file and only building:", end='')
+    for key in platforms:
+        data[key] = key in sys.argv[2:]
+        if data[key]:
+            print(" " + key, end='')
+    print('\n')
 
 gamename = ''
 fullname = ''
@@ -214,7 +230,7 @@ if data["linux"]:
         run_cmd("mkdir -p " + linux32_buildir)
         chdir(linux32_buildir)
         run_cmd("mkdir -p install")
-        cfg_cmd = cmake_cmd + ' -DYAML_INCLUDE_DIR=' + data["libyaml_source_path"] + '/include/'
+        cfg_cmd = cmake_cmd.replace('"','\\"') + ' -DYAML_INCLUDE_DIR=' + data["libyaml_source_path"] + '/include/'
         cfg_cmd += ' -DSDL2_MIXER_EXT_INCLUDE_DIR:PATH=' + data["sdl2_mixer_ext_source_path"] + '/include/SDL_mixer_ext'
         cfg_cmd += ' -DSDL2_MIXER_EXT_LIBRARY:FILEPATH=' + data["sdl2_mixer_ext_source_path"] + '/build_bullseye_32/lib/libSDL2_mixer_ext.a'
         cfg_cmd += ' -DLZ4_INCLUDE_DIR=' + data["lz4_source_path"] + '/lib/ ' + cwd
