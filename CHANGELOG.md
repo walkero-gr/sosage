@@ -28,6 +28,7 @@ History of versions and modifications of the SOSAGE engine.
 ### Game Engine
 
 - Gamepad rumble
+- Several optimizations
 
 ## `v1.5.5 (achievements5)` - 2023-10-09
 

@@ -50,6 +50,9 @@ if v_data == '' or v_major == '' or v_minor == '' or v_patch == '':
 
 #version = v_major + '.' + v_minor + '.' + v_patch + '-d' + v_data + '-' + v_variant
 version = v_major + '.' + v_minor + '.' + v_patch + '-d' + v_data
+if "postfix" in data:
+    version += "-" + data["postfix"]
+
 print(version)
 
 id = gamename + '-v' + version
@@ -72,7 +75,7 @@ mac_buildir = data["buildfolder"] + "/mac"
 steam_mac_buildir = data["buildfolder"] + "/steam_mac"
 win_buildir = data["buildfolder"] + "/win"
 steam_win_buildir = data["buildfolder"] + "/steam_win"
-output_dir = data["output"] + "/release-v" + version
+output_dir = data["output"] + "/v" + version
 steam_dir = output_dir + "/steam"
 appname = gamename + "-" + version
 dataname = gamename + "-d" + v_data
@@ -130,7 +133,8 @@ print("### INIT")
 begin = time.perf_counter()
 if not os.path.isdir(output_dir):
     run_cmd("mkdir -p " + output_dir)
-    run_cmd("mkdir -p " + steam_dir)
+    if data["steam_linux"] or data["steam_win"] or data["steam_mac"]:
+        run_cmd("mkdir -p " + steam_dir)
 end = time.perf_counter()
 print("  -> done in " + str(int(end - begin)) + "s\n")
 
@@ -377,8 +381,6 @@ if data["androidapk"] or data["androidaab"]:
             end = time.perf_counter()
             print("  -> done in " + str(int(end - begin)) + "s\n")
         chdir(cwd)
-        end = time.perf_counter()
-        print("  -> done in " + str(int(end - begin)) + "s\n")
     except:
         chdir(cwd)
         print("  -> failed")
