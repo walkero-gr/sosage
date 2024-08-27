@@ -2,6 +2,17 @@
 
 History of versions and modifications of the SOSAGE engine.
 
+## `v1.6.1 (mit1)` - 2024-08-27
+
+### Release Management
+
+- Update target Android version to 14 (API level 34)
+
+### Bug fixes
+
+- Add a missing include that could trigger a compilation error on some
+  platforms
+
 ## `v1.6.0 (mit)` - 2023-12-20
 
 ### Release Management

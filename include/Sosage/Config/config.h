@@ -37,6 +37,7 @@
 
 #include <memory>
 #include <limits>
+#include <initializer_list>
 
 namespace Sosage::Config
 {
