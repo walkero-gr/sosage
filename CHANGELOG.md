@@ -2,6 +2,12 @@
 
 History of versions and modifications of the SOSAGE engine.
 
+## `v1.6.2 (mit1)` - TBD
+
+### Release Management
+
+- Add metainfo management
+
 ## `v1.6.1 (mit1)` - 2024-08-27
 
 ### Release Management

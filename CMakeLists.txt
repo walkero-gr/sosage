@@ -240,6 +240,7 @@ if (CMAKE_SYSTEM_NAME STREQUAL Linux)
   endif()
   install(FILES ${SOSAGE_DATA_FOLDER}/resources/icon.svg DESTINATION share/icons/ RENAME ${SOSAGE_EXE_NAME}.svg)
   install(FILES ${SOSAGE_DATA_FOLDER}/resources/${SOSAGE_EXE_NAME}.desktop DESTINATION share/applications/)
+  install(FILES ${SOSAGE_DATA_FOLDER}/resources/${SOSAGE_EXE_NAME}.metainfo.xml DESTINATION share/metainfo/)
   set(CPACK_GENERATOR "DEB;RPM")
 
 elseif (CMAKE_SYSTEM_NAME STREQUAL Windows)
