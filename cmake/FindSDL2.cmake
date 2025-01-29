@@ -68,6 +68,9 @@
 # message("<FindSDL2.cmake>")
 
 SET(SDL2_SEARCH_PATHS
+	$ENV{SDK_PATH}/local/${LIBC}/ 
+	$ENV{SDK_PATH}/local/common/
+	/gg/
 	~/Library/Frameworks
 	/Library/Frameworks
 	/usr/local
@@ -88,6 +91,10 @@ FIND_PATH(SDL2_INCLUDE_DIR SDL.h
 
 if(CMAKE_SIZEOF_VOID_P EQUAL 8) 
 	set(PATH_SUFFIXES lib64 lib/x64 lib)
+elseif (CMAKE_SYSTEM_NAME STREQUAL "AmigaOS4")
+	set(PATH_SUFFIXES lib)
+elseif (CMAKE_SYSTEM_NAME STREQUAL "MorphOS")
+	set(PATH_SUFFIXES lib)
 else() 
 	set(PATH_SUFFIXES lib/x86 lib)
 endif() 

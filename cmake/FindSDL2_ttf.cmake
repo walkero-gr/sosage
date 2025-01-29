@@ -49,11 +49,13 @@ find_path(SDL2_TTF_INCLUDE_DIR SDL_ttf.h
         PATH_SUFFIXES SDL2
         # path suffixes to search inside ENV{SDLDIR}
         include/SDL2 include
-        PATHS ${SDL2_TTF_PATH}
+        PATHS $ENV{SDK_PATH}/local/${LIBC}/ $ENV{SDK_PATH}/local/common/ /gg/ ${SDL2_TTF_PATH}
         )
 
 if (CMAKE_SIZEOF_VOID_P EQUAL 8)
     set(VC_LIB_PATH_SUFFIX lib/x64)
+elseif (CMAKE_SYSTEM_NAME STREQUAL "AmigaOS4")
+    set(PATH_SUFFIXES lib)
 else ()
     set(VC_LIB_PATH_SUFFIX lib/x86)
 endif ()
@@ -64,7 +66,7 @@ find_library(SDL2_TTF_LIBRARY
         ENV SDL2TTFDIR
         ENV SDL2DIR
         PATH_SUFFIXES lib ${VC_LIB_PATH_SUFFIX}
-        PATHS ${SDL2_TTF_PATH}
+        PATHS $ENV{SDK_PATH}/local/${LIBC} /gg/ ${SDL2_TTF_PATH}
         )
 
 if (SDL2_TTF_INCLUDE_DIR AND EXISTS "${SDL2_TTF_INCLUDE_DIR}/SDL_ttf.h")

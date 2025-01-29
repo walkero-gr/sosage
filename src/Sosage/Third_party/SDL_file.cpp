@@ -64,7 +64,18 @@ Asset open (const void* memory, std::size_t size)
 
 std::size_t read (Asset asset, void* ptr, std::size_t max_num)
 {
-  return std::size_t(SDL_RWread(asset.buffer, ptr, 1, max_num));
+  std::size_t bytesRead = std::size_t(SDL_RWread(asset.buffer, ptr, 1, max_num));
+  if (bytesRead == 2 && SDL_BYTEORDER == SDL_BIG_ENDIAN)
+  {
+    uint16_t* bytes = static_cast<uint16_t*>(ptr);
+    *bytes = __builtin_bswap16(*bytes);
+  }
+  if (bytesRead == 4 && SDL_BYTEORDER == SDL_BIG_ENDIAN)
+  {
+    uint32_t* bytes = static_cast<uint32_t*>(ptr);
+    *bytes = __builtin_bswap32(*bytes);
+  }
+  return bytesRead;
 }
 
 void write (Asset asset, const char* str)

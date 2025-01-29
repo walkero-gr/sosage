@@ -304,6 +304,9 @@ SDL::Image SDL::load_image (const std::string& file_name, bool with_mask, bool w
              SDL_Texture* texture = nullptr;
              SDL_Rect rect = Splitter::rect (width, height, x, y);
              SOSAGE_TIMER_START(SDL_Image__load_image_file);
+#if defined(__amigaos4__) || defined(__morphos__)
+             format_int = SDL_PIXELFORMAT_BGRA32;
+#endif // defined(__amigaos4__) || defined(__morphos__)
              surf = SDL_CreateRGBSurfaceWithFormatFrom (m_buffer, rect.w, rect.h, 32, rect.w * 4, format_int);
              SDL_LockSurface (surf);
              Asset_manager::open (file_name, surf->pixels, x, y);
@@ -777,6 +780,9 @@ SDL::Surface SDL::load_surface (const std::string& file_name)
   int width, height;
   int format_int;
   std::tie (width, height, format_int) = Asset_manager::image_info (file_name);
+#if defined(__amigaos4__) || defined(__morphos__)
+  format_int = SDL_PIXELFORMAT_BGRA32;
+#endif // __amigaos4__ || __morphos__
   surf = Surface(SDL_CreateRGBSurfaceWithFormat (0, width, height, 32, format_int), SDL_FreeSurface);
   SDL_LockSurface (surf.get());
   Asset_manager::open (file_name, surf->pixels);
@@ -869,8 +875,11 @@ void SDL::init (int& window_width, int& window_height, bool fullscreen)
                                (fullscreen ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0));
   check (m_window != nullptr, "Cannot create SDL Window ("
          + std::string(SDL_GetError()) + ")");
-
+#if defined(__morphos__)
+  m_renderer = SDL_CreateRenderer (m_window, -1, SDL_RENDERER_ACCELERATED);
+#else
   m_renderer = SDL_CreateRenderer (m_window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+#endif // __morphos__
   check (m_renderer != nullptr, "Cannot create SDL Renderer: (" + std::string(SDL_GetError()) + ")");
 
   SDL_DisplayMode mode;

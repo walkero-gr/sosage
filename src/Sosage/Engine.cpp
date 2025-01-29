@@ -55,7 +55,9 @@
 #include <Sosage/System/Menu.h>
 #include <Sosage/System/Sound.h>
 #include <Sosage/System/Time.h>
+#if defined(__amigaos4__) || defined(__morphos__)
 #include <Sosage/Third_party/Steam.h>
+#endif
 #include <Sosage/Utils/error.h>
 #include <Sosage/Utils/profiling.h>
 
@@ -91,7 +93,9 @@ Engine::Engine (int argc, char** argv)
 
   handle_cmdline_args(argc, argv);
 
+#if defined(__amigaos4__) || defined(__morphos__)
   Steam::init();
+#endif
 
 #ifdef SOSAGE_EMSCRIPTEN
   emscripten_global_engine_ptr = this;
@@ -103,7 +107,9 @@ Engine::~Engine()
   // Clear content before shutting down systems
   m_content.clear();
 
+#if defined(__amigaos4__) || defined(__morphos__)
   Steam::shutdown();
+#endif
 }
 
 bool Engine::run (const std::string& folder_name)
@@ -213,7 +219,9 @@ bool Engine::run()
   SOSAGE_COUNT(Engine_loop_iterations);
   for (System::Handle system : m_systems)
     system->run();
+#if defined(__amigaos4__) || defined(__morphos__)
   Steam::run();
+#endif
   return !m_content.receive("Game", "exit");
 }
 

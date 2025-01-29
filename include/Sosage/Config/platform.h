@@ -75,7 +75,7 @@ constexpr bool gnunux = false;
 constexpr bool emscripten = false;
 constexpr bool port = false;
 
-#elif defined(__linux__)
+#elif defined(__linux__) || defined(__amigaos4__) || defined(__morphos__)
 #define SOSAGE_GNUNUX
 constexpr bool android = false;
 constexpr bool mac = false;

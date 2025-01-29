@@ -31,7 +31,9 @@
 */
 
 #include <Sosage/Config/platform.h>
+#ifndef __amigaos4__
 #include <Sosage/Third_party/Steam.h>
+#endif
 #include <Sosage/Utils/locale.h>
 
 #include <SDL_locale.h>

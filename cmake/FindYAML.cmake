@@ -8,7 +8,7 @@
 # first look in user defined locations
 find_path (YAML_INCLUDE_DIR
   NAMES yaml.h
-  PATHS /usr/local/include/ /usr/include
+  PATHS $ENV{SDK_PATH}/local/${LIBC}/include/ $ENV{SDK_PATH}/local/common/include/ /gg/include/ /usr/local/include/ /usr/include
   ENV YAML_INC_DIR
   )
 
@@ -16,6 +16,8 @@ find_library(YAML_LIBRARIES
   NAMES yaml
   PATHS ENV LD_LIBRARY_PATH
   ENV LIBRARY_PATH
+  $ENV{SDK_PATH}/local/${LIBC}/lib
+  /gg/lib
   /usr/local/lib
   /usr/lib
   ${YAML_INCLUDE_DIR}/../lib

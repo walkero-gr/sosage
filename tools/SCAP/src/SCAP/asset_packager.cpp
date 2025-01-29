@@ -47,7 +47,9 @@
 #include <fstream>
 #include <sstream>
 
+#if !defined(__amigaos4__) && !defined(__morphos__)
 #include <tbb/parallel_for_each.h>
+#endif
 
 namespace SCAP
 {
@@ -209,9 +211,11 @@ void write_image (std::ofstream& ofile, const std::string& filename, bool is_obj
   };
 
   std::size_t limit = 3;
+#if !defined(__amigaos4__) && !defined(__morphos__)
   if (tiles.size() > limit)
     tbb::parallel_for_each (index.begin(), index.end(), compress_images);
   else
+#endif
     std::for_each (index.begin(), index.end(), compress_images);
 
   std::size_t total_size_before = 0;
