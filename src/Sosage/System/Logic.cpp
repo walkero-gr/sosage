@@ -357,8 +357,19 @@ void Logic::update_scheduled(Component::Action_handle a, bool skip_dialog)
       }
       // else
       auto anim = C::cast<C::Animation>(th.second);
-      if (anim->is_last_frame())
-        return false;
+      if (anim)
+      {
+        // Get the current animation state (it might have changed since scheduling)
+        auto current_anim = request<C::Animation>(anim->entity(), anim->component());
+        
+        // If animation no longer exists or is turned off, it completed
+        if (!current_anim || !current_anim->on())
+          return false;
+        
+        // Check if it's on the last frame
+        if (current_anim->is_last_frame())
+          return false;
+      }
       return true;
     }
     if (th.first <= m_current_time)

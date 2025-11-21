@@ -75,18 +75,40 @@ void Animation::run()
     return;
   }
 
+  // Update moves and state every game frame for smooth interpolation
+  // But only advance animations when frame_id advances (at 12fps)
+  bool should_advance_animations = (new_frame_id != m_frame_id);
+  
   if (new_frame_id == m_frame_id)
   {
     // Force update when new room is loaded
     if (signal("Game", "in_new_room"))
+    {
       run_animation_frame();
-    SOSAGE_TIMER_STOP(System_Animation__run);
-    return;
+    }
+    else
+    {
+      // Update moves and state without advancing animation frames
+      // This ensures smooth interpolation at low FPS
+      bool in_new_room = receive ("Game", "in_new_room");
+      handle_character_lookat(in_new_room);
+      handle_animation_stops();
+      bool has_moved = handle_moves();
+      handle_animation_starts();
+      handle_state_changes();
+      if (has_moved)
+        update_camera_target();
+    }
   }
-
-  for (std::size_t i = m_frame_id; i < new_frame_id; ++ i)
-    run_animation_frame();
-  m_frame_id = new_frame_id;
+  else
+  {
+    // Process all missed animation frames when catching up
+    // This ensures animations advance correctly even at low FPS
+    for (std::size_t i = m_frame_id; i < new_frame_id; ++ i)
+      run_animation_frame();
+    m_frame_id = new_frame_id;
+  }
+  
   SOSAGE_TIMER_STOP(System_Animation__run);
 }
 

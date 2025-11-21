@@ -166,8 +166,19 @@ bool Animation::next_frame()
 
 bool Animation::is_last_frame() const
 {
-  return (m_current == m_frames.size() - 1)
-      && (m_frames[m_current].ellapsed == m_frames[m_current].duration - 1);
+  if (m_frames.empty() || m_current >= m_frames.size())
+    return false;
+    
+  // Check if we're on the last frame
+  if (m_current != m_frames.size() - 1)
+    return false;
+  
+  const auto& last_frame = m_frames[m_current];
+  
+  // We're on the last frame - check if we're about to complete
+  // For duration=1, ellapsed should be 0 (will complete on next call)
+  // For duration>1, ellapsed should be duration-1 (will complete on next call)
+  return (last_frame.ellapsed == last_frame.duration - 1);
 }
 
 } // namespace Sosage::Component
