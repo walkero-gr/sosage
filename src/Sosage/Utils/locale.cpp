@@ -31,7 +31,7 @@
 */
 
 #include <Sosage/Config/platform.h>
-#ifndef __amigaos4__
+#if !defined(__amigaos4__) && !defined(__morphos__)
 #include <Sosage/Third_party/Steam.h>
 #endif
 #include <Sosage/Utils/locale.h>

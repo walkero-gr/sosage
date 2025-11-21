@@ -33,6 +33,7 @@
 #ifndef SOSAGE_THIRD_PARTY_STEAM_H
 #define SOSAGE_THIRD_PARTY_STEAM_H
 
+#if !defined(__amigaos4__) && !defined(__morphos__)
 #include <string>
 
 namespace Sosage::Steam
@@ -47,5 +48,5 @@ bool set_achievement (const std::string& id);
 void shutdown();
 
 }
-
+#endif
 #endif // SOSAGE_THIRD_PARTY_STEAM_H

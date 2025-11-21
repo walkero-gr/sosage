@@ -30,6 +30,7 @@
   Author(s): Simon Giraudot <sosage@ptilouk.net>
 */
 
+#if !defined(__amigaos4__) && !defined(__morphos__)
 #include <Sosage/Third_party/Steam.h>
 #include <Sosage/Utils/error.h>
 
@@ -95,3 +96,4 @@ void shutdown()
 }
 
 } // namespace Sosage
+#endif

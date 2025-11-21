@@ -45,7 +45,7 @@
 #include <Sosage/Component/Status.h>
 #include <Sosage/Component/Variable.h>
 #include <Sosage/System/Logic.h>
-#if defined(__amigaos4__) || defined(__morphos__)
+#if !defined(__amigaos4__) && !defined(__morphos__)
 #include <Sosage/Third_party/Steam.h>
 #endif
 #include <Sosage/Utils/conversions.h>
@@ -507,7 +507,7 @@ bool Logic::function_notify (const std::vector<std::string>& args)
   if (args.size() == 1) // Achievement
   {
     emit(args[0], "done");
-#if defined(__amigaos4__) || defined(__morphos__)
+#if !defined(__amigaos4__) && !defined(__morphos__)
     if (Steam::set_achievement(args[0]))
     {
       debug << "Achievement " << args[0] << " done and stored" << std::endl;
@@ -521,7 +521,7 @@ bool Logic::function_notify (const std::vector<std::string>& args)
       double duration = 3;
       std::string id = push_notification(text, duration);
       emit(id, "is_achievement");
-#if defined(__amigaos4__) || defined(__morphos__)
+#if !defined(__amigaos4__) && !defined(__morphos__)
     }
 #endif
   }
