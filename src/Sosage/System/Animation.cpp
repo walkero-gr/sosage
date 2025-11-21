@@ -96,6 +96,12 @@ void Animation::run()
       bool has_moved = handle_moves();
       handle_animation_starts();
       handle_state_changes();
+      
+      // Process components marked for removal (added by handle functions)
+      for (C::Handle c : m_to_remove)
+        remove(c, true);  // Use optional=true to avoid errors if already removed
+      m_to_remove.clear();
+      
       if (has_moved)
         update_camera_target();
     }
