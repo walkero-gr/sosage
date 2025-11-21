@@ -111,7 +111,18 @@ void Animation::run()
   {
     // Process all missed animation frames when catching up
     // This ensures animations advance correctly even at low FPS
-    for (std::size_t i = m_frame_id; i < new_frame_id; ++ i)
+    // Cap the catch-up to prevent animations from speeding up on fast systems
+    constexpr std::size_t MAX_CATCHUP_FRAMES = 2;  // Process at most 2 frames per update
+    std::size_t frames_to_process = new_frame_id - m_frame_id;
+    if (frames_to_process > MAX_CATCHUP_FRAMES)
+    {
+      // If we're too far behind, just skip ahead instead of processing everything
+      // This prevents animations from appearing to speed up on very fast systems
+      m_frame_id = new_frame_id - MAX_CATCHUP_FRAMES;
+      frames_to_process = MAX_CATCHUP_FRAMES;
+    }
+    
+    for (std::size_t i = 0; i < frames_to_process; ++i)
       run_animation_frame();
     m_frame_id = new_frame_id;
   }
@@ -237,8 +248,56 @@ void Animation::run_animation_frame()
   // Then check animations stopping
   handle_animation_stops();
 
-  // Then check all other cases
-  bool has_moved = handle_moves();
+  // Handle path-based movement (frame-locked, only when animation frame advances)
+  bool has_moved = false;
+  for (auto c : components("path"))
+    if (auto path = C::cast<C::Path>(c))
+    {
+      if (path->entity() != "Debug" && !compute_movement_from_path(path))
+        m_to_remove.push_back(c);
+      else if (path->entity() == value<C::String>("Player", "name"))
+      {
+        has_moved = true;
+        emit("Music", "adjust_mix");
+      }
+    }
+
+  // Handle interpolation-based moves (for smooth movement)
+  for (auto c : components("move"))
+    if (auto a = C::cast<C::Tuple<Point, Point, int, int, double, double>>(c))
+    {
+      double ftime = frame_time(value<C::Double>(CLOCK__TIME));
+      double ratio = (ftime - a->get<4>()) / (a->get<5>() - a->get<4>());
+
+      if (a->get<4>() == a->get<5>())
+        ratio = 1.;
+
+      Point current = ratio * a->get<1>() + (1 - ratio) * a->get<0>();
+      if (ratio > 1)
+        current = a->get<1>();
+      int z = round(ratio * a->get<3>() + (1 - ratio) * a->get<2>());
+      if (ratio > 1)
+        z = a->get<3>();
+
+      get<C::Position>(a->entity() , "position")->set (current);
+      get<C::Image>(a->entity(), "image")->z() = z;
+    }
+
+  for (auto c : components("rescale"))
+    if (auto a = C::cast<C::Tuple<double, double, double, double>>(c))
+    {
+      double ftime = frame_time(value<C::Double>(CLOCK__TIME));
+      double ratio = (ftime - a->get<2>()) / (a->get<3>() - a->get<2>());
+
+      if (a->get<2>() == a->get<3>())
+        ratio = 1.;
+
+      double scale = ratio * a->get<1>() + (1 - ratio) * a->get<0>();
+      if (ratio > 1)
+        scale = a->get<1>();
+
+      get<C::Image>(a->entity() , "image")->set_scale (scale);
+    }
 
   handle_animation_starts();
 
@@ -356,6 +415,7 @@ bool Animation::handle_moves()
 {
   bool has_moved = false;
 
+  // Handle interpolation-based moves (can run every frame for smoothness)
   for (auto c : components("move"))
     if (auto a = C::cast<C::Tuple<Point, Point, int, int, double, double>>(c))
     {
@@ -394,18 +454,10 @@ bool Animation::handle_moves()
       get<C::Image>(a->entity() , "image")->set_scale (scale);
     }
 
+  // Path-based movement should only happen when animation frames advance
+  // This is handled in run_animation_frame(), not here
+  // (moved to run_animation_frame() to prevent speed issues on fast systems)
 
-  for (auto c : components("path"))
-    if (auto path = C::cast<C::Path>(c))
-    {
-      if (path->entity() != "Debug" && !compute_movement_from_path(path))
-        m_to_remove.push_back(c);
-      else if (path->entity() == value<C::String>("Player", "name"))
-      {
-        has_moved = true;
-        emit("Music", "adjust_mix");
-      }
-    }
   return has_moved;
 }
 
